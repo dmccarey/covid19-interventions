@@ -110,7 +110,11 @@ border_dfL <- bind_rows(border_list)
 #### Full intervention dataset ####
 
 interven_df <- bind_rows(border_dfL, interven_df_simp)
-interven_df <- interven_df %>% mutate(up = ifelse(up == 0, "No Update","Update"))
+interven_df <- (interven_df
+                %>% mutate(up = ifelse(up == 0, "No Update","Update"))
+                # %>% filter(interven_df, up == "Update",
+                #            (up_specific == "Update" | is.na(up_specific)))
+)
 
 write.csv(interven_df, "survey_data_long.csv", row.names = FALSE)
 
