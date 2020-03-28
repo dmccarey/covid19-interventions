@@ -34,8 +34,8 @@ pull_data <- function(api_path = "private/api_token.txt",
     country_data <- country_data[, c("record_id", "country")]
     
     #Merging in country data
-    data <- data %>% rename(country_name = country_data)
+    data <- data %>% rename(country_name = country)
     data2 <- data %>% full_join(country_data, by = "record_id")
 
-    return(data)
+    return(data2)
 }
