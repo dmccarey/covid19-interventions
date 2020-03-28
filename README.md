@@ -6,4 +6,4 @@ Major government mandated actions come with huge economic risks and many are ask
 
 Data will be made available online very soon. For more information contact covit@jhu.edu
 
-If you would like to help with the data collection (esp if you are closely following the situation in a country), please complete [this](https://forms.gle/5D9zv2ctgwfvPSG69) form and we will be in touch.
+**If you would like to help with the data collection (esp if you are closely following the situation in a country), please complete [this](https://forms.gle/5D9zv2ctgwfvPSG69) form and we will be in touch.**
