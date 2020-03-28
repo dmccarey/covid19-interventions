@@ -8,6 +8,7 @@ reload_source <- function(){
     library(dplyr)
     library(tidyr)
     library(ggplot2)
+    library(naniar)
     source("source/utils.R")
 }
 
