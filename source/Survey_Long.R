@@ -1,25 +1,17 @@
 #John's Hopkins COVID-19 Interventions Survey
-
-setwd("~/Boston University/COVID_Interventions")
-library(redcapAPI)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-
-## Pulling data from Redcap
-rcon <- redcapConnection(url, api_token)
-data <- exportRecords(rcon, checkboxLabels = TRUE, labels = FALSE, factors = FALSE)
-
+source("source/utils.R")
+reload_source()
+data <- pull_data()
 
 ############################ Creating long version of dataset ##########################
 
 # #Function to create long version
 # create_long <- function(url, api_token){
-#   
+#
 #   #Pulling data from REDcap
 #   rcon <- redcapConnection(url, api_token)
 #   data <- exportRecords(rcon, checkboxLabels = FALSE, labels = FALSE, factors = FALSE)
-#   
+#
 #   #Move below into this function to read in raw data and create long version
 # }
 
@@ -117,6 +109,3 @@ interven_df <- (interven_df
 )
 
 write.csv(interven_df, "survey_data_long.csv", row.names = FALSE)
-
-
-
