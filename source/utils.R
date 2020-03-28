@@ -26,7 +26,16 @@ pull_data <- function(api_path = "private/api_token.txt",
 
     ## Pulling data from Redcap
     rcon <- redcapConnection(url, api_token)
-    data <- exportRecords(rcon, checkboxLabels = TRUE, labels = FALSE, factors = FALSE)
+    data <- exportRecords(rcon, checkboxLabels = TRUE, labels = FALSE, factors = TRUE)
+    
+    #Reading the country in separately to get code while keeping factor (no factors)
+    #while allowing factors for all other fields
+    country_data <- exportRecords(rcon, fields = c("country", "record_id"), labels = FALSE, factors = FALSE)
+    country_data <- country_data[, c("record_id", "country")]
+    
+    #Merging in country data
+    data <- data %>% rename(country_name = country_data)
+    data2 <- data %>% full_join(country_data, by = "record_id")
 
     return(data)
 }
