@@ -1,0 +1,187 @@
+"record_id","geography_and_intro_timestamp","email","first_name","last_name","country","country_name","geography_and_intro_complete","admin_1_unit_and_updates_timestamp","adm1","national_entry","adm_lowest","no_updates","intervention","intervention_specific","up","up_specific","timestamp","source","url","complete","status","pop","t","details","required","enforcement","req","size","quarantine_t","quarantine_details","quarantine_status"
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"limited_mvt","limited_mvt","Update",NA,"2020-03-29 14:57:34","[document]",NA,"Complete","partially restricted","other subpopulation",2020-01-31,"Travelers at high risk for exposure are quarantined",NA,NA,NA,NA,NA,NA,NA
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-28 23:58:56","[document]","https://www.sobyanin.ru/koronavirus-mery-po-nedopuscheniyu-proniknoveniya-infektsii
+(mayor's website)","Complete","fully restricted","other subpopulation",2020-02-21,"Date is at the latest (when it's reported, but it would have started between 21 January and 21 February).
+This applies to all passengers coming from flights from China; they're restricted to their households for 2 weeks. This also includes travelers from China that had come to Moscow earlier and were identified in public spaces as well as through raids on hotels, apartment buildings, etc. ","required","Yes",NA,NA,NA,NA,NA
+"12","2020-03-29 10:18:43","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:19:15","RUS.43_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 10:20:50","[document]","https://www.mos.ru/upload/documents/docs/12-YM.pdf","Complete","fully restricted","other subpopulation",2020-03-05,"14 days self quarantine for those arriving from China, South Korea, Italy, Iran, France, Germany, and Spain (with provision for other countries with problematic situation). This is an expansion of the previous policy, which was primarily limited to China","required",NA,NA,NA,NA,NA,NA
+"14","2020-03-29 10:41:56","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:42:37","RUS.43_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 10:43:50","[document]","https://www.mos.ru/upload/documents/docs/20-YM.pdf","Complete","fully restricted","other subpopulation",2020-03-14,"14 days self quarantine to include household members of people returning from countries with concerning epidemiological situation","required",NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 15:00:12","[document]",NA,"Complete","partially restricted","other subpopulation",2020-03-16,"Older adults and others with elevated risk or chronic diseases recommended to remain at home","recommended","No",NA,NA,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 15:32:42","[document]",NA,"Complete","fully restricted","entire population",2020-03-19,"All Californians are ordered to stay home except for necessary activities.","required","No",NA,NA,NA,NA,NA
+"29","2020-03-29 17:04:33","gdebroucker@jhu.edu","Gatien","de Broucker","CAN","Canada","Complete","2020-03-29 17:05:35","CAN.2_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 17:07:22","[document]","https://news.gov.bc.ca/releases/2020HLTH0026-000246","Complete","unrestricted",NA,2020-02-07,"""Together with our federal and provincial partners, we are asking people who have recently visited, or who have been in close contact with someone who has recently visited, the Hubei province in China to call public health officials and self-isolate for 14 days.""","recommended",NA,NA,NA,NA,NA,NA
+"31","2020-03-29 17:16:20","kara.rudolph@gmail.com","Kara ","Rudolph","USA","United States of America","Complete","2020-03-29 17:22:30","USA.33_1","No",NA,FALSE,"household_confined","household_confined","Update",NA,"2020-03-29 17:23:44","[document]","https://coronavirus.health.ny.gov/new-york-state-pause","Complete","partially restricted","entire population",2020-03-22,NA,"recommended","No",NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"nursing_home_closed","nursing_home_closed","Update",NA,"2020-03-29 15:07:11","[document]",NA,"Complete","partially closed","other subpopulation",2020-03-13,"Catherine Gimbrone:
+	https://www.amazon.com/gp/product/B073WGMSN2/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1
+	https://www.amazon.com/gp/product/B071VYD4WZ/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1
+Apple Computer:
+	Add me on Houseparty:
+	https://houseparty.com/add/ajsul
+Catherine Gimbrone:
+	This is weird she isn't showing up
+Apple Computer:
+	oh no i'm sorry
+	tried calling?
+Catherine Gimbrone:
+	I texted her
+	I hope she is ok
+Apple Computer:
+	im sure shes just running late! 
+Catherine Gimbrone:
+	I dunno
+	I dont think so
+Apple Computer:
+	https://www.seriouseats.com/2020/03/food-safety-and-coronavirus-a-comprehensive-guide.html
+Catherine Gimbrone:
+	https://www.yelp.com/search?find_desc=Biggest+Supermarket&find_loc=Brooklyn%2C+NY
+	https://www.yelp.com/biz/shoprite-of-avenue-i-brooklyn-3?osq=Biggest+Supermarket
+	https://goo.gl/maps/Hi2aCb8o2DqFRVhaA
+	https://twitter.com/NYCASP
+	https://www.foodkick.com/browse/sale_fvg_fruit
+	Susannah did this
+	Said it goood
+	When dinner done?
+Apple Computer:
+	im stuck-the next step is v loud
+Catherine Gimbrone:
+	I can mute
+Apple Computer:
+	whateve you wan
+Catherine Gimbrone:
+	Do it
+	https://www.reddit.com/r/COVID19/comments/fo0rpe/stanford_researchers_confirm_n95_masks_can_be/?utm_source=share&utm_medium=ios_app&utm_name=iossmf
+Apple Computer:
+	hm
+	groceries to get:
+CO2 cartridges
+whole chicken
+elderberry syrup
+ground beef to freeze
+cauliflower
+cured meats
+mirin
+sun-dried tomatoes
+chocolate
+dried thyme
+pine nuts
+barley
+sumac
+ground star anise
+dried mushrooms
+Catherine Gimbrone:
+	Im 99% she has COVID
+	My professor
+Apple Computer:
+	('◉⌓◉')
+Catherine Gimbrone:
+	She drove to Bloomington Indiana to get away
+	Also I was reading that article yesterday for a quiz we were supposed to have but apparently she opened the quiz from 9 to 1 today and then closed it!
+	But also was like everyone gets 100% and no more quizzes going forward
+Apple Computer:
+	nice
+Catherine Gimbrone:
+	After my class and meeting at 4:30 which probably will go to 5:30 do you want to start drinking and make brownies
+Apple Computer:
+	🐛
+	👍*
+	nothin
+	lookin around
+Catherine Gimbrone:
+	fuuuuck
+	Did they throw it over the dooooor
+	Is there mail
+Apple Computer:
+	mail ya
+Catherine Gimbrone:
+	Ok come back and get davids keys
+	Be sneaky
+	https://www1.nyc.gov/site/doh/covid/covid-19-main.page
+	You can download graphs of the cases from here twice a day
+	https://docs.google.com/document/d/1EuI6RS8zhSYn4nLA1iRJDYx1VjVfSFJ_GSY1IqZHraI/edit#
+	https://cooking.nytimes.com/recipes/11003-fast-tomato-sauce-with-anchovies?module=Recipe+of+The+Day&pgType=homepage&action=click
+	Limit entry to necessary persons and family/friends. Restrict movement and exposure of high-risk individuals. Restrict entry for individuals with potential COVID-19 exposure, confirmed cases status, or who has recently traveled internationally. Staff should take care to protect themselves.",NA,NA,"yes",NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"office_closed","office_closed","Update",NA,"2020-03-29 15:07:58","[document]",NA,"Complete","closed","entire population",2020-03-19,"All non-essential businesses must close.",NA,NA,"yes",NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"entertainment_closed","entertainment_closed","Update",NA,"2020-03-29 15:09:09","[document]",NA,"Complete","partially closed","entire population",2020-03-13,"Guidelines from CDPH for limiting customers, increasing social distancing, increasing cleaning, and eliminating events for vulnerable individuals for gambling, theme parks and attractions, and theaters.",NA,NA,"no",NA,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"entertainment_closed","entertainment_closed","Update",NA,"2020-03-29 15:33:22","[document]",NA,"Complete","closed","entire population",2020-03-16,"Gyms, health clubs, and theaters should be closed.",NA,NA,"yes",NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"store_closed","store_closed","Update",NA,"2020-03-29 15:11:50","[document]",NA,"Complete","closed","entire population",2020-03-19,"All non-essential businesses must close.",NA,NA,"yes",NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"public_space_closed","public_space_closed","Update",NA,"2020-03-29 15:12:29","[document]",NA,"Complete","partially closed","entire population",2020-03-17,"All campgrounds closed.",NA,NA,"yes",NA,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"public_space_closed","public_space_closed","Update",NA,"2020-03-29 15:34:13","[document]",NA,"Complete","partially closed","entire population",2020-03-24,"Restricting vehicular traffic to some state parks.",NA,NA,"yes",NA,NA,NA,NA
+"25","2020-03-29 15:38:08","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:38:18","USA.5_1","No",NA,FALSE,"public_space_closed","public_space_closed","Update",NA,"2020-03-29 15:39:34","[document]",NA,"Complete","partially closed","entire population",2020-03-26,"Additional restriction of vehicular traffic to more state parks. High public use indoor facilities ordered closed. All events in state parks have been canceled.",NA,NA,"yes",NA,NA,NA,NA
+"14","2020-03-29 10:41:56","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:42:37","RUS.43_1","No",NA,FALSE,"social_group_limits","social_group_limits","Update",NA,"2020-03-29 10:50:46","[document]","https://www.mos.ru/upload/documents/docs/17-YMot10032020(2).pdf","Complete","required","entire population",2020-03-10,"Ban on mass gatherings and events of more than 5000 participants; anticipated to last until April 10 2020. ",NA,NA,NA,5000,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"social_group_limits","social_group_limits","Update",NA,"2020-03-29 15:14:06","[document]",NA,"Complete","required","entire population",2020-03-11,"The state's public health experts have determined that gatherings should be postponed or canceled across the state until at least the end of March. Non-essential gatherings must be limited to no more than 250 people, while smaller events can proceed only if the organizers can implement social distancing of 6 feet per person. Gatherings of individuals who are at higher risk for severe illness from COVID-19 should be limited to no more than 10 people, while also following social distancing guidelines.",NA,NA,NA,250,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"social_group_limits","social_group_limits","Update",NA,"2020-03-29 15:35:00","[document]",NA,"Complete","required","entire population",2020-03-16,"All gatherings should be postponed or cancelled. No limit on the number of people in a gathering.",NA,NA,NA,NA,NA,NA,NA
+"20","2020-03-29 14:42:32","azman@jhu.edu","Andrew","Azman","MWI","Malawi","Complete","2020-03-29 14:45:54",NA,"Yes",NA,FALSE,"testing_symp","testing_symp","Update",NA,"2020-03-29 14:52:42","[document]",NA,"Complete","all",NA,2020-03-19,"All suspected cases supposed to be tested, including those identified at the border.
+
+SUSPECT CASE
+
+A.	Patients with acute respiratory illness (FEVER and at least one sign/symptom of respiratory disease (e.g. cough, difficulties in breathing)), AND with no other etiology that fully explains the clinical presentation1 AND at least one of the following:
+
+•	a history of travel to or residence in a country, area or territory reporting local transmission of COVID-19 during the 14 days prior to symptom onset, or
+
+•	is a health care worker or any person who has been working in an environment where COVID-19 cases are being managed.
+
+
+B.	A patient with any acute respiratory illness AND having been in contact2 with a confirmed or probable COVID-19 case in the last 14 days prior to onset of symptoms;
+OR
+C.	A patient with severe acute respiratory infection (fever and at least one sign/symptom of respiratory disease (e.g., cough, shortness breath) AND requiring hospitalization AND with no other etiology that fully explains the clinical presentation.
+
+Note: these recs were made 31-Jan but no testing was in place until 19-March. 
+
+
+",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"testing_symp","testing_symp","Update",NA,"2020-03-29 15:22:13","[document]",NA,"Complete","some","symptom severity;travel history;other",2020-01-31,"Testing recommended for travelers at high risk for exposure but doctors allowed to make exceptions. First community spread case tested after multiple days of refused testing because she had not traveled to affected areas.",NA,NA,NA,NA,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"testing_symp","testing_symp","Update",NA,"2020-03-29 15:36:03","[document]",NA,"Complete","some","symptom severity;hospitalization;travel history;contact with case;other potential exposure",2020-03-05,"If you are experiencing symptoms of COVID-19 and may have had contact with a person with COVID-19 or recently traveled to countries with apparent community spread, call your health care provider or local public health department first before seeking medical care. Free medically necessary testing made available to Californians.",NA,NA,NA,NA,NA,NA,NA
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"testing_asymp","testing_asymp","Update",NA,"2020-03-29 01:19:28","[document]","https://mrprcbcw.hosts.jhmi.edu/redcap/surveys/?s=DbMnYkz3Cn","Complete","some","travel history;contact with case",2020-02-21,"Implemented some time between 21 Jan and 21 Feb. All passengers arriving from China are tested upon arrival at the airport, even those that are asymptomatic. They are tested again at day 10 of self-isolation/quarantine.
+Contacts of cases (including presumed cases) may also be tested.",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"testing_asymp","testing_asymp","Update",NA,"2020-03-29 15:24:11","[document]",NA,"Complete","some","travel history",2020-01-31,"All individuals traveling from affected areas have been tested for virus.",NA,NA,NA,NA,NA,NA,NA
+"24","2020-03-29 15:31:12","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:31:47","USA.5_1","No",NA,FALSE,"testing_asymp","testing_asymp","Update",NA,"2020-03-29 15:36:59","[document]",NA,"Complete","none",NA,2020-03-20,"Guidance against testing asymptomatic people.",NA,NA,NA,NA,NA,NA,NA
+"28","2020-03-29 16:48:31","gdebroucker@jhu.edu","Gatien","de Broucker","CAN","Canada","Complete","2020-03-29 16:51:01","CAN.2_1","No",NA,FALSE,"testing_asymp","testing_asymp","Update",NA,"2020-03-29 16:57:38","[document]","https://news.gov.bc.ca/releases/2020HLTH0020-000210","Complete","some","travel history;other",2020-02-03,"Individuals repatriated from Hubei province, China are tested and quarantine at the Trenton military base for 14 days + testing in the provincial population (unknown criteria / availability): ""In B.C., we have chosen testing criteria with an intentionally low threshold to purposely ensure a wide range of people are eligible for novel coronavirus testing.""",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"enforcement_deployed","enforcement_deployed","Update",NA,"2020-03-29 15:25:27","[document]",NA,"Complete","no",NA,2020-03-20,"National guard being deployed to help distribute food at food banks.",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"state_of_emergency","state_of_emergency","Update",NA,"2020-03-29 15:26:02","[document]",NA,"Complete","yes",NA,2020-03-04,NA,NA,NA,NA,NA,NA,NA,NA
+"3","2020-03-28 23:23:20","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:28:54","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_air","Update","Update","2020-03-28 23:35:38","[document]","https://www.reuters.com/article/us-china-health-pneumonia-russia/russia-steps-up-airport-screening-of-chinese-travelers-over-coronavirus-fears-idUSKBN1ZK1AG
+https://www.svo.aero/ru/press_center/press_releases/sanitary-and-epidemiological-control-on-flights-from-china-to-sheremetyevo-is-strengthened
+http://www.vnukovo.ru/at-the-airport/informations/v-mezhdunarodnom-aeroportu-vnukovo-usilen-sanitarno-karantinnyy-kontrol-na-vozdushnykh-sudakh-pribyvayushchikh-iz-knr-/
+yes","Complete","required","geographic subpopulation",2020-01-21,"Implemented in Shermemetyevo + Vnukovo airport (Moscow), in addition to two other airports. Screening of all passengers from airplanes arriving from China, though loose enough to include passengers from countries significantly affected by coronavirus (Vnukovo explicitly includes Thailand as of 23-01-2020). ",NA,NA,NA,NA,NA,NA,NA
+"19","2020-03-29 14:32:27","azman@jhu.edu","Andrew","Azman","MWI","Malawi","Complete","2020-03-29 14:33:39",NA,"Yes",NA,FALSE,"symp_screening","symp_screening_air","Update","Update","2020-03-29 14:37:39","[document]",NA,"Complete","required","entire population",2020-01-31,"Screening of all people coming through borders. Information sourced from contacts within the MoH. 
+
+1.	Ask all passengers to stand on a queue before entering the passport control area.
+2.	Ask all passengers to wash hands with either alcohol based sanitizer,0.05% Chlorine solution or Soap and Water
+3.	Take temperature readings for all passengers and screen for other symptoms i.e. cough, difficulty breathing, runny nose 
+4.	Use the PoE screening algorithm for passenger flow
+5.	Ask the passengers (one by one) to submit their filled Traveller Health Declaration Form.
+6.	 Isolate those coming China and other Coronavirus affected areas such as for further screening/investigation.
+•	Ask if the person has any of the following signs of illness: Fever, headache, cough, sore throat, runny nose, difficulties in breathing
+•	Ask if the person had contact with a sick person in the past 14 days
+•	Ask for the person's contact details while in Malawi (Ensure Traveller Health Declaration Form attached below is adequately filled).
+•	Ask the person to report to any nearest health facility if he/she develops any signs of illness and to explain to the clinician their recent travel history.",NA,NA,NA,NA,NA,NA,NA
+"23","2020-03-29 15:28:17","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 15:29:04",NA,"Yes",NA,FALSE,"symp_screening","symp_screening_air","Update","Update","2020-03-29 15:30:44","[document]",NA,"Complete","required","other subpopulation",2020-01-17,"Screening travelers from Wuhan, China at SFO, LAX, and JFK",NA,NA,NA,NA,NA,NA,NA
+"26","2020-03-29 15:57:22","gdebroucker@jhu.edu","Gatien","de Broucker","CAN","Canada","Complete","2020-03-29 16:10:08","CAN.2_1","No",NA,FALSE,"symp_screening","symp_screening_air","Update","Update","2020-03-29 16:13:19","[document]","https://news.gov.bc.ca/releases/2020HLTH0010-000102","Complete","recommended","other subpopulation",2020-01-21,"In co-ordination with the Public Health Agency of Canada, our public health teams are responding by closely monitoring the situation and have implemented screening for early detection of infections for individuals arriving in airports. Quarantine officers are available at Vancouver International Airport to co-ordinate any response required, and Richmond Hospital infection control practitioners are ready to respond to any potential scenario where a patient may require further investigation.",NA,NA,NA,NA,NA,NA,NA
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_land","Update","Update","2020-03-29 00:42:52","[document]","https://www.sobyanin.ru/koronavirus-mery-po-nedopuscheniyu-proniknoveniya-infektsii","Complete","required","other subpopulation",2020-02-21,"Policy probably started before the report date; screening at stations (not specified bus or train, but probably both), aiming to get people who recently arrived from China.",NA,NA,NA,NA,NA,NA,NA
+"19","2020-03-29 14:32:27","azman@jhu.edu","Andrew","Azman","MWI","Malawi","Complete","2020-03-29 14:33:39",NA,"Yes",NA,FALSE,"symp_screening","symp_screening_land","Update","Update","2020-03-29 14:37:39","[document]",NA,"Complete","required","entire population",2020-01-31,"Screening of all people coming through borders. Information sourced from contacts within the MoH. 
+
+1.	Ask all passengers to stand on a queue before entering the passport control area.
+2.	Ask all passengers to wash hands with either alcohol based sanitizer,0.05% Chlorine solution or Soap and Water
+3.	Take temperature readings for all passengers and screen for other symptoms i.e. cough, difficulty breathing, runny nose 
+4.	Use the PoE screening algorithm for passenger flow
+5.	Ask the passengers (one by one) to submit their filled Traveller Health Declaration Form.
+6.	 Isolate those coming China and other Coronavirus affected areas such as for further screening/investigation.
+•	Ask if the person has any of the following signs of illness: Fever, headache, cough, sore throat, runny nose, difficulties in breathing
+•	Ask if the person had contact with a sick person in the past 14 days
+•	Ask for the person's contact details while in Malawi (Ensure Traveller Health Declaration Form attached below is adequately filled).
+•	Ask the person to report to any nearest health facility if he/she develops any signs of illness and to explain to the clinician their recent travel history.",NA,NA,NA,NA,NA,NA,NA
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_within","Update","Update","2020-03-29 00:42:52","[document]","https://www.sobyanin.ru/koronavirus-mery-po-nedopuscheniyu-proniknoveniya-infektsii","Complete","required","other subpopulation",2020-02-21,"Policy probably started before the report date; screening at stations for those that arrived from China to St Petersburg, and then traveled from St Petersburg to Moscow. ",NA,NA,NA,NA,NA,NA,NA
+"11","2020-03-29 09:58:54","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 09:59:17","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_within","Update","Update","2020-03-29 10:03:52","[document]","https://www.mos.ru/donm/documents/normativnye-pravovye-akty/view/236081220/
+https://www.mos.ru/news/item/70458073/ ","Complete","required","other subpopulation",2020-02-27,"A prikaz of Department of Education and Science of Moscow City orders schools to implement ""morning filters,"" which means that at entry to school, students are screened, including a temperature check. During the day, their health is supposed to be monitored, although it's not specified how. Children with elevated temperature of other symptoms are to be isolated before their caregivers can take them home, and their information should be shared with a health clinic. ",NA,NA,NA,NA,NA,NA,NA
+"12","2020-03-29 10:18:43","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:19:15","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_within","Update","Update","2020-03-29 10:22:28","[document]","https://www.sobyanin.ru/podtverzhden-sluchai-novoi-koronavirusnoi-infektsii","Complete","required","random sample",2020-03-02,"Could have been implemented a little before this date; unclear exactly when. 
+Screening of a sample of people at entrance to the metro in Moscow ",NA,NA,NA,NA,NA,NA,NA
+"13","2020-03-29 10:23:14","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:26:24","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_within","Update","Update","2020-03-29 10:27:33","[document]","https://www.sobyanin.ru/podtverzhden-sluchai-novoi-koronavirusnoi-infektsii","Complete","recommended","other subpopulation",2020-03-02,"Recommendation to employees to measure temperature of their employees",NA,NA,NA,NA,NA,NA,NA
+"14","2020-03-29 10:41:56","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-29 10:42:37","RUS.43_1","No",NA,FALSE,"symp_screening","symp_screening_within","Update","Update","2020-03-29 10:45:30","[document]","https://www.mos.ru/upload/documents/docs/12-YM.pdf","Complete","required","geographic subpopulation",2020-03-05,"Employers are not required (not just recommended) to screen at workplace, including temperature. Employees with elevated temperature or other symptoms are to be sent home.",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"restaurant_closed","restaurant_closed","Update","Update","2020-03-29 15:11:14","[document]",NA,"Complete","closed","entire population",2020-03-16,"Retail beverage places and food service places should close except for delivery and takeout. Does not apply to food trucks, grocery stores, farmers markets, and charitable food distribution sites. Guidance is provided for the latter businesses.",NA,NA,"yes",NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"restaurant_closed","restaurant_reduced","Update","Update","2020-03-29 15:11:14",NA,NA,"Complete",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"contact_tracing","contact_tracing","Update","Update","2020-03-29 00:48:24","[document]","https://mrprcbcw.hosts.jhmi.edu/redcap/surveys/?s=76zUtHQkpK","Complete","complete contact tracing",NA,2020-02-21,"Date of implementation is probably before this date (some time between 21 Jan and 21 February). 
+Complete contact tracing of any presumed cases (eg one positive test, but not necessarily confirmed case); contacts are told to remain under quarantine. Facial recognition and other technology used to identify some contacts. ",NA,NA,NA,NA,2020-02-21,"Rounding date - sometime between 21 January and 21 February 2020.
+They were ready to quarantine more than 600 contacts of one case that had a positive result, before they found out that it was a false positive. ","all regardless of symptoms"
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"contact_tracing","contact_tracing","Update","Update","2020-03-29 15:18:30","[document]",NA,"Complete","partial contact tracing",NA,2020-02-26,"Contact tracing initiated after first community spread of disease. From news article: Contacts being monitored. Testing for healthcare workers who came in contact with case and quarantine.",NA,NA,NA,NA,2020-02-26,"Testing for healthcare workers who came in contact with case and quarantining regardless of symptoms. May be a special case.","special groups of contacts not related to symptoms"
+"27","2020-03-29 16:34:58","gdebroucker@jhu.edu","Gatien","de Broucker","CAN","Canada","Complete","2020-03-29 16:40:12","CAN.2_1","No",NA,FALSE,"contact_tracing","contact_tracing","Update","Update","2020-03-29 16:43:47","[document]","https://news.gov.bc.ca/releases/2020HLTH0015-000151","Complete","partial contact tracing",NA,2020-01-28,"Following 1st case in the province, ""Public health officials are in regular contact with the individual and a small number of close contacts. He is in isolation at home.""",NA,NA,NA,NA,NA,NA,"all symptomatic"
+"4","2020-03-28 23:48:04","nkostan1@jhmi.edu","Natalya","Kostandova","RUS","Russian Federation","Complete","2020-03-28 23:55:34","RUS.43_1","No",NA,FALSE,"contact_tracing","contact_tracing_quarantine","Update","Update","2020-03-29 00:48:24","[document]","https://mrprcbcw.hosts.jhmi.edu/redcap/surveys/?s=76zUtHQkpK","Complete","all regardless of symptoms",NA,2020-02-21,"Rounding date - sometime between 21 January and 21 February 2020.
+They were ready to quarantine more than 600 contacts of one case that had a positive result, before they found out that it was a false positive. ",NA,NA,NA,NA,NA,NA,NA
+"22","2020-03-29 14:50:33","gimbrone@gmail.com","Catherine","Gimbrone","USA","United States of America","Complete","2020-03-29 14:53:17","USA.5_1","No",NA,FALSE,"contact_tracing","contact_tracing_quarantine","Update","Update","2020-03-29 15:18:30","[document]",NA,"Complete","special groups of contacts not related to symptoms",NA,2020-02-26,"Testing for healthcare workers who came in contact with case and quarantining regardless of symptoms. May be a special case.",NA,NA,NA,NA,NA,NA,NA
+"27","2020-03-29 16:34:58","gdebroucker@jhu.edu","Gatien","de Broucker","CAN","Canada","Complete","2020-03-29 16:40:12","CAN.2_1","No",NA,FALSE,"contact_tracing","contact_tracing_quarantine","Update","Update","2020-03-29 16:43:47","[document]","https://news.gov.bc.ca/releases/2020HLTH0015-000151","Complete","all symptomatic",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA

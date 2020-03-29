@@ -1,19 +1,19 @@
-#John's Hopkins COVID-19 Interventions Survey
+#Script for pulling data and making a nicer dataset for visuralization and analyses
 
-setwd("~/Boston University/COVID_Interventions/covid19-interventions")
-#Reading Data
-url_path <- "~/Boston University/COVID_Interventions/url.txt"
-api_path <- "~/Boston University/COVID_Interventions/api.txt"
 
+# Where to save clean data file
+out_file_path <- "generated_data/survey_data_long.csv"
+
+#Reading data
 source("source/utils.R")
 reload_source()
 
 #Reading raw survey data
-data <- pull_data(api_path, url_path)
+cat(sprintf("pulling data from API \n"))
+data <- pull_data()
 
 #Columns that uniquely identify a record
-idCols <- c("record_id", "redcap_repeat_instrument", "redcap_repeat_instance",
-            "redcap_survey_identifier", "geography_and_intro_timestamp",
+idCols <- c("record_id","geography_and_intro_timestamp",
             "email", "first_name", "last_name", "country", "country_name",
             "geography_and_intro_complete",
             "admin_1_unit_and_updates_timestamp", "adm1",
@@ -205,7 +205,6 @@ contact_tracing_long <- function(survey_data, idCols, interven_name){
 
 
 #### Function to Create Long Version of Dataset ####
-
 #Function to create full long version
 create_long <- function(raw_survey_data, idCols){
 
@@ -214,7 +213,7 @@ create_long <- function(raw_survey_data, idCols){
   
   #Subsetting to rows with completed geography and admin1 (valid entries)
   #Renaming columns as needed and doing other preliminary cleaning
-  data2 <- (data
+  data2 <- (raw_survey_data
             %>% filter(geography_and_intro_complete == "Complete",
                        admin_1_unit_and_updates_complete == "Complete")
             #Changing all factors to character
@@ -230,8 +229,8 @@ create_long <- function(raw_survey_data, idCols){
                        symp_screening_complete = symptom_screening_complete,
                        nursing_home_closed_timestamp = nursing_homelongterm_care_closures_timestamp,
                        nursing_home_closed_complete = nursing_homelongterm_care_closures_complete,
-                       entertainment_closed_timestamp = leisure_and_entertainment_venue_closures_timestamp,
-                       entertainment_closed_complete = leisure_and_entertainment_venue_closures_complete,
+                       entertainment_closed_timestamp = leisure_entertainment_and_religious_venue_closures_timestamp,
+                       entertainment_closed_complete = leisure_entertainment_and_religious_venue_closures_complete,
                        restaurant_closed_timestamp = restaurant_closures_and_restrictions_timestamp,
                        restaurant_closed_complete = restaurant_closures_and_restrictions_complete,
                        store_closed_timestamp = retail_store_closures_timestamp,
@@ -287,12 +286,17 @@ create_long <- function(raw_survey_data, idCols){
   interven_df_simp <- combine_interven_simp(some_updates, idCols, interven_names_simp)
   #Creating long version for complex interventions
   border_dfL <- closed_border_long(some_updates, idCols, "closed_border")
+  
   screening_dfL <- symp_screening_long(some_updates, idCols, "symp_screening")
   restaurant_dfL <- restaurant_closed_long(some_updates, idCols, "restaurant_closed")
   contact_dfL <- contact_tracing_long(some_updates, idCols, "contact_tracing")
   
   #Combining all of the intervention datasets 
-  interven_dfL <- bind_rows(border_dfL, interven_df_simp)
+  interven_dfL <- bind_rows(border_dfL,
+                            interven_df_simp,
+                            screening_dfL,
+                            restaurant_dfL,
+                            contact_dfL)
   
   
   #### Final cleaning ####
@@ -309,12 +313,9 @@ create_long <- function(raw_survey_data, idCols){
 
 }
 
-
-
 #### Running Cleaning/Long Function ####
 
 interven_dfL_clean <- create_long(data, idCols)
 
-write.csv(interven_dfL_clean, "../survey_data_long.csv", row.names = FALSE)
-
-
+cat(sprintf("Saving long file at %s \n",out_file_path))
+write.csv(interven_dfL_clean, out_file_path, row.names = FALSE)

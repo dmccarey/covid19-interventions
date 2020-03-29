@@ -8,8 +8,10 @@ reload_source <- function(){
     library(dplyr)
     library(tidyr)
     library(ggplot2)
+    library(readr)
     library(naniar)
     source("source/utils.R")
+    source("source/Survey_Long.R")
 }
 
 
@@ -40,3 +42,23 @@ pull_data <- function(api_path = "private/api_token.txt",
 
     return(data2)
 }
+
+
+#' Load long data by either pulling from API
+#' and creating it on the fly or loading std csv 
+#' file
+#' @param fresh_pull generate directly from server?
+#' @param long_file_path path to where the std long file is saved
+#' csv file
+get_long_data <- function(fresh_pull=FALSE,
+                          long_file_path="generated_data/survey_data_long.csv"){
+    
+    if(fresh_pull){
+        source("source/Survey_Long.R")
+    } 
+    
+    rc <- read_csv(long_file_path)
+    
+    return(rc)
+}    
+    
