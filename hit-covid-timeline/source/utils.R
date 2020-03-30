@@ -4,14 +4,10 @@
 ##' reloads packages and key function files
 ##' @return nothing
 reload_source <- function(){
-    library(redcapAPI)
-    library(dplyr)
-    library(tidyr)
-    library(ggplot2)
-    library(readr)
-    library(naniar)
+    library(pacman)
+    p_load(redcapAPI,dplyr,tidyr,ggplot2,readr,naniar,shiny,purrr,DT,markdown)
     source("source/utils.R")
-    #source("source/Survey_Long.R")
+    ## load required packages not in reload_source()
 }
 
 

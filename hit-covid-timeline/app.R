@@ -1,18 +1,10 @@
-## global variables
-app_title   <- "HIT-COVID"
-
-## load all .R files in source directory
+## load functions and source packages
 source("source/utils.R")
 reload_source()
 
 ## some look table for countries and admin units
 admin_lookup <- read_csv("geo_lookup.csv")
 country_names <- setNames(admin_lookup$admin0,nm =admin_lookup$NAME_0 ) #%>% na.omit
-
-
-## load required packages not in reload_source()
-if(!require(pacman)) install.packages("magrittr", repos = "http://cran.us.r-project.org")
-p_load(shiny,readr,purrr,DT,markdown)
 
 ## set up data
 long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv")
@@ -94,16 +86,13 @@ server <- function(input, output,session) {
         
         if(input$include_national){
             # figure out which country
+            # get national level data and create fake obs for this admin unit
             cntry <- admin_lookup %>% dplyr::filter(GID_1==input$admin_unit) %>% select(admin0) %>% unlist %>% first
-            #cntry <- interven_df_table %>% filter(admin1==admin_unit) %>% select(country) %>% unlist %>% first
-            
+
             national_ints <- tmp %>% dplyr::filter(national_entry=="Yes" & country==cntry) %>% 
                 mutate(admin1 = input$admin_unit)
             
-            #if this is zero length (e.g., nothing has been entered yet), we make a 
-            
-            
-            tmp<-bind_rows_keep_factors(tmp,national_ints)
+            tmp<-bind_rows(tmp,national_ints)
             # get national observations
         }
         
