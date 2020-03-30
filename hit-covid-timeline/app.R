@@ -12,7 +12,7 @@ country_names <- setNames(admin_lookup$admin0,nm =admin_lookup$NAME_0 ) #%>% na.
 
 ## load required packages not in reload_source()
 if(!require(pacman)) install.packages("magrittr", repos = "http://cran.us.r-project.org")
-p_load(shiny,plotly,leaflet,readr,purrr,DT)
+p_load(shiny,readr,purrr,DT,markdown)
 
 ## set up data
 long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv")
@@ -63,26 +63,6 @@ ui <- fluidPage(
     )
 )
 
-
-# mainPanel(
-#     includeMarkdown("include/heading_box.md"),
-#     br(),
-#     plotOutput(fmtr("main_plot"), width = "60%", height = "400px"),
-#     br(),
-#     checkboxInput(fmtr("show_los"), "Show duration of hospitalisation", FALSE),
-#     conditionalPanel(
-#         condition = sprintf("input.%s == true", fmtr("show_los")),
-#         plotOutput(fmtr("los_plot"), width = "30%", height = "300px")
-#     ),
-#     checkboxInput(fmtr("show_table"), "Show summary table", FALSE),
-#     conditionalPanel(
-#         condition = sprintf("input.%s == true", fmtr("show_table")),
-#         DT::dataTableOutput(fmtr("main_table"), width = "50%")
-#     ),
-#     
-# )
-
-
 # Define server logic required to draw a histogram
 server <- function(input, output,session) {
 
@@ -107,7 +87,7 @@ server <- function(input, output,session) {
         
     )
     
-    
+    ## make timeline plot
     output$timeline <- renderPlot({
         
         tmp <- interven_df_table
@@ -128,7 +108,7 @@ server <- function(input, output,session) {
         }
         
         
-        
+        # can add back ggplotly later but this isn't so pretty without munging
         #ggplotly(
             ggplot(data = tmp %>% filter(admin1 %in% input$admin_unit),
                aes(x = date_of_update, y = intervention_specific,
