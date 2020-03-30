@@ -53,8 +53,15 @@ get_long_data <- function(fresh_pull=FALSE,
         source("source/Survey_Long.R")
     } 
     
-    rc <- read_csv(long_file_path)
-    
+    rc <- tryCatch({
+        read_csv(long_file_path)
+        },
+        error=function(x){
+         message(sprintf("file %s doesn't seem to exist \n",long_file_path))
+            return(NA)
+        }
+    )
+
     return(rc)
 }    
     
