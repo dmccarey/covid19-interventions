@@ -5,7 +5,7 @@
 out_file_path <- "generated_data/survey_data_long.csv"
 
 #Reading data
-source("source/utils.R")
+source("hit-covid-timeline/source/utils.R")
 reload_source()
 
 #Reading raw survey data
@@ -318,7 +318,8 @@ create_long <- function(raw_survey_data, idCols){
                          #%>% bind_rows(no_updates)
                          %>% replace_na(list(national_entry = "No"))
                          #Removing names and emails and req (combined with required above)
-                         %>% select(-first_name, -last_name, -email, -req, -geography_and_intro_complete)
+                         %>% select(-first_name, -last_name, -email, -req, -no_updates,
+                                    -geography_and_intro_complete)
   )
 
 }
