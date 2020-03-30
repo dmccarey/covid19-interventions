@@ -5,7 +5,7 @@
 ##' @return nothing
 reload_source <- function(){
     library(pacman)
-    p_load(redcapAPI,dplyr,tidyr,ggplot2,readr,naniar,shiny,purrr,DT,markdown)
+    p_load(redcapAPI,dplyr,tidyr,ggplot2,readr,naniar,shiny,purrr,DT,markdown,leaflet)
     source("source/utils.R")
     ## load required packages not in reload_source()
 }
