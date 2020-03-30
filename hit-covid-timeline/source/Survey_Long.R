@@ -188,12 +188,15 @@ restaurant_closed_long <- function(survey_data, idCols, interven_name){
 contact_tracing_long <- function(survey_data, idCols, interven_name){
   
   #Names of the specific interventions
-  specific_names <- c("contact_tracing", "contact_tracing_quarantine")
+  specific_names <- c("contact_tracing", "contact_quarantine")
   
   #Subsetting and renaming columns
   interven_df <- (survey_data[, c(idCols, names(survey_data)[grepl(interven_name, names(survey_data))])]
                   %>% mutate(contact_tracing = contact_tracing_up,
-                             contact_tracing_quarantine_status = contact_tracing_quarantine)
+                             contact_quarantine_status = contact_tracing_quarantine)
+                  %>% rename(contact_quarantine_t = contact_tracing_quarantine_t,
+                             contact_quarantine_details = contact_tracing_quarantine_details,
+                             contact_quarantine = contact_tracing_quarantine)
   )
   
   #Running function to clean and combine specific interventions
@@ -301,14 +304,21 @@ create_long <- function(raw_survey_data, idCols){
   
   #### Final cleaning ####
   
-  #Final cleaning including removing interventions that are incomplete no update
+  #Final cleaning including
   interven_dfL_clean <- (interven_dfL
-                         %>% mutate(up = ifelse(up == "", "No Update", "Update"))
+                         %>% mutate(up = ifelse(up == "", "No Update", "Update"),
+                                    required = ifelse(is.na(required) & req == "yes", "required",
+                                               ifelse(is.na(required) & req == "no", "recommended",
+                                    required)))
+                         #Removing interventions that are incomplete no update
                          %>% filter(up == "Update" &
                                       (up_specific == "Update" | is.na(up_specific)),
                                     complete == "Complete")
-                         %>% bind_rows(no_updates)
+                         #Not adding rows which intentionally denote no update for now
+                         #%>% bind_rows(no_updates)
                          %>% replace_na(list(national_entry = "No"))
+                         #Removing names and emails and req (combined with required above)
+                         %>% select(-first_name, -last_name, -email, -req, -geography_and_intro_complete)
   )
 
 }
