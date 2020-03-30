@@ -5,7 +5,7 @@
 out_file_path <- "generated_data/survey_data_long.csv"
 
 #Reading data
-source("hit-covid-timeline/source/utils.R")
+source("source/utils.R")
 reload_source()
 
 #Reading raw survey data
