@@ -46,14 +46,17 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
+            tabsetPanel(
+                tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
             br(),
             plotOutput("timeline"),
             p("Below is a table of all the data to explore:"),
             dataTableOutput("overview_tab")
-        )
-    )
-)
+                ),
+            tabPanel("Map",
+                     )
+            ))))
 
 # Define server logic required to draw a histogram
 server <- function(input, output,session) {
