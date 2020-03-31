@@ -7,15 +7,20 @@ admin_lookup <- read_csv("geo_lookup.csv")
 country_names <- setNames(admin_lookup$admin0,nm =admin_lookup$NAME_0 ) #%>% na.omit
 admin_names <- setNames(admin_lookup$GID_1,nm =admin_lookup$NAME_1 ) %>% na.omit
 
+## look-up table for clean intervention names
+interven_names <- read_csv("intervention_lookup.csv")
+
 ## set up data
 long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv")
 last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 
 interven_df_plot <- long_data   %>% 
     filter(complete == "Complete") %>% 
+    #Adding cleaned intervention names
+    left_join(interven_names, by = "intervention_specific") %>%
     select(record_id, entry_time = geography_and_intro_timestamp,
            national_entry, country, country_name, admin1 = adm1, admin1_name,
-           locality = adm_lowest, intervention_specific,
+           locality = adm_lowest, intervention_clean,
            date_of_update = t, status, subpopulation = pop,
            required, enforcement, details) %>%
     mutate(status_simp = ifelse(status %in% c("closed", "fully closed",
@@ -28,10 +33,6 @@ interven_df_plot <- long_data   %>%
                                 labels = c("open/no/no policy",
                                            "partially closed/partially restricted/\nrecommended/some",
                                            "closed/restricted/all/yes")))
-
-
-#interven_df_table <- interven_df_plot   %>% 
-#    select(-national_entry, -status_simp, -country, -admin1)
 
 
 # Define UI for application that draws a histogram
@@ -97,7 +98,8 @@ server <- function(input, output,session) {
     output$overview_tab <- renderDT(
         interven_df_plot   %>% 
             filter(country == input$country_select) %>%
-            select(-national_entry, -status_simp, -country, -admin1),
+            select(-national_entry, -status_simp, -country, -admin1) %>%
+            arrange(admin1_name),
         class = "display nowrap compact", # style
         filter = "top", # location of column filters,
         options = list(  # options
@@ -128,20 +130,20 @@ server <- function(input, output,session) {
         ## can make this nicer later
         tmp <- tmp %>% mutate(tooltip=paste0("record id: ",record_id,"\n",
                                              "date: ",date_of_update,"\n",
-                                             "intervention: ",intervention_specific,"\n",
+                                             "intervention: ",intervention_clean,"\n",
                                              "status: ",status,"\n",
                                              "subpopulation: ",subpopulation,"\n",
                                              "required:",required,"\n",
                                              "enforcement:",enforcement))
             
         gg <- ggplot(data = tmp %>% filter(admin1 %in% input$admin_unit),
-               aes(x = date_of_update, y = intervention_specific,
+               aes(x = date_of_update, y = intervention_clean,
                    shape = status_simp, 
                    color = national_entry)) +
                 geom_point_interactive(aes(tooltip = tooltip,
                                            data_id = record_id),size=3)+
             #geom_point(size = 3) + 
-            xlab("date of policy change") + 
+            xlab("Date of policy change") + 
             ylab("") + theme(legend.position="bottom") + theme_bw() + labs(color="National Policy?",shape="Policy Status")
         
             girafe(ggobj = gg,width_svg = 12)
