@@ -69,6 +69,7 @@ ui <- fluidPage(
             dataTableOutput("overview_tab")
                 ),
             tabPanel("Map",
+                     leafletOutput("simp_map")
                      )
             ))))
 
@@ -149,6 +150,66 @@ server <- function(input, output,session) {
             girafe(ggobj = gg,width_svg = 12)
 
     })
+    
+    ## map
+    
+    output$simp_map <- renderLeaflet({
+        ## just a quick one with where we have data right now
+        ## and last update
+        simp_dat <- long_data %>% 
+            group_by(country) %>% 
+            summarize(n = n(),
+                      n_national = sum(national_entry=="Yes"),
+                      n_admin1 = n_distinct(adm1)) %>% 
+            left_join(admin_lookup %>% rename(country=admin0) %>% select(country),.) %>% 
+            distinct %>% 
+            mutate(n=replace_na(n,0),
+                   n_national=replace_na(n_national,0),
+                   n_admin1 = replace_na(n_admin1,0)
+            )
+        ## bring in world map
+        ## from https://exploratory.io/map
+        world <- geojsonio::geojson_read("world.geojson", what = "sp") %>% st_as_sf 
+        
+        wd = left_join(world,simp_dat %>% rename(ISO_A3=country))
+        
+        pal <- colorNumeric(
+            palette = "YlOrRd",
+            domain = simp_dat$n)
+        
+        labels <- sprintf(
+            "<strong>%s</strong><br/>%s intervention changes logged<br/>%s intervention changes logged nationally <br/>%s administrative units with data",
+            wd$NAME,wd$n,wd$n_national, wd$n_admin1
+        ) %>% lapply(htmltools::HTML)
+        
+        
+        leaflet(wd) %>% 
+            addPolygons(fillColor = ~pal(n),
+                        weight = 2,
+                        opacity = 1,
+                        color = "white",
+                        dashArray = "3",
+                        fillOpacity = 0.6,
+                        highlight = highlightOptions(
+                            weight = 5,
+                            color = "#666",
+                            dashArray = "",
+                            fillOpacity = 0.7,
+                            bringToFront = TRUE),
+                        label = labels,
+                        labelOptions = labelOptions(
+                            style = list("font-weight" = "normal", padding = "3px 8px"),
+                            textsize = "15px",
+                            direction = "auto")) %>% 
+            addLegend("bottomleft", pal = pal, values = ~n_national,
+                      title = "Number of interventions logged",
+                      opacity = .6
+            )
+    })
+    
+    
+    
+    
 }
 
 # Run the application 
