@@ -15,6 +15,11 @@ reload_source <- function(){
     if (!require('markdown')) install.packages('markdown'); library('markdown')
     if (!require('stringr')) install.packages('stringr'); library('stringr')
     if (!require('ggiraph')) install.packages('ggiraph'); library('ggiraph')
+    if (!require('sf')) install.packages('sf'); library('sf')
+    if (!require('sp')) install.packages('sp'); library('sp')
+    if (!require('leaflet')) install.packages('leaflet'); library('leaflet')
+    if (!require('geojsonio')) install.packages('geojsonio'); library('geojsonio')
+    
     source("source/utils.R")
     ## load required packages not in reload_source()
 }
