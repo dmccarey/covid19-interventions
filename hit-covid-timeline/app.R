@@ -51,6 +51,12 @@ ui <- fluidPage(
         # Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(
+                tabPanel("Overview",
+                         br(),
+                         h2("Welcome to the Health Intervention Tracking for COVID-19 Application"),
+                         h3(sprintf("%.0f interventions logged",nrow(interven_df_plot))),
+                         h3(sprintf("%.0f countries covered",n_distinct(interven_df_plot$country))),
+                    ),
                 tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
             br(),
@@ -72,7 +78,7 @@ server <- function(input, output,session) {
     
     observeEvent(country_select(), {
         tmp<-country_select()
-        choices <- setNames(tmp[,"GID_1"],nm=tmp[,"NAME_1"] ) %>% na.omit
+        choices <- setNames(tmp$GID_1,nm=tmp$NAME_1 ) #%>% na.omit
         updateSelectInput(session,"admin_unit", choices = choices) 
     })
     
