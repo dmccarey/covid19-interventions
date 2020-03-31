@@ -29,8 +29,9 @@ interven_df_plot <- long_data   %>%
                                            "partially closed/partially restricted/\nrecommended/some",
                                            "closed/restricted/all/yes")))
 
-interven_df_table <- interven_df_plot   %>% 
-    select(-national_entry, -status_simp, -country, -admin1)
+
+#interven_df_table <- interven_df_plot   %>% 
+#    select(-national_entry, -status_simp, -country, -admin1)
 
 
 # Define UI for application that draws a histogram
@@ -56,6 +57,8 @@ ui <- fluidPage(
                          h2("Welcome to the Health Intervention Tracking for COVID-19 Application"),
                          h3(sprintf("%.0f interventions logged",nrow(interven_df_plot))),
                          h3(sprintf("%.0f countries covered",n_distinct(interven_df_plot$country))),
+                         br(),
+                         downloadButton("download_data", label = "Download Current Data")
                     ),
                 tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
@@ -71,6 +74,15 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output,session) {
 
+    
+    output$download_data <- downloadHandler(
+        filename = function() {
+            paste("hit-covid-data-", Sys.Date(), ".csv", sep="")
+        },
+        content = function(file) {
+            write_csv(interven_df_plot, file)
+        }
+    )
 
     country_select <- reactive({
         filter(admin_lookup, admin0 == input$country_select)
@@ -83,7 +95,9 @@ server <- function(input, output,session) {
     })
     
     output$overview_tab <- renderDT(
-        interven_df_table,
+        interven_df_plot   %>% 
+            filter(country == input$country_select) %>%
+            select(-national_entry, -status_simp, -country, -admin1),
         class = "display nowrap compact", # style
         filter = "top", # location of column filters,
         options = list(  # options

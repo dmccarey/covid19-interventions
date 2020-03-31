@@ -333,8 +333,9 @@ create_long <- function(raw_survey_data, idCols){
                          #Removing names and emails and req (combined with required above)
                          %>% select(-first_name, -last_name, -email, -req, -no_updates,
                                     -geography_and_intro_complete)
-  )
-
+                         # cleaning up country names a little bit 
+  ) %>% mutate(country_name = str_remove_all(country_name,"[^[:alnum:] ]"))
+  
 }
 
 
