@@ -4,8 +4,17 @@
 ##' reloads packages and key function files
 ##' @return nothing
 reload_source <- function(){
-    library(pacman)
-    p_load(redcapAPI,dplyr,tidyr,ggplot2,readr,naniar,shiny,purrr,DT,markdown,leaflet,stringr,ggiraph)
+    if (!require('redcapAPI')) install.packages('redcapAPI'); library('redcapAPI')
+    if (!require('dplyr')) install.packages('dplyr'); library('dplyr')
+    if (!require('tidyr')) install.packages('tidyr'); library('tidyr')
+    if (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2')
+    if (!require('readr')) install.packages('readr'); library('readr')
+    if (!require('naniar')) install.packages('naniar'); library('naniar')
+    if (!require('shiny')) install.packages('shiny'); library('shiny')
+    if (!require('DT')) install.packages('DT'); library('DT')
+    if (!require('markdown')) install.packages('markdown'); library('markdown')
+    if (!require('stringr')) install.packages('stringr'); library('stringr')
+    if (!require('ggiraph')) install.packages('ggiraph'); library('ggiraph')
     source("source/utils.R")
     ## load required packages not in reload_source()
 }
