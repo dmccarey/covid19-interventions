@@ -12,11 +12,19 @@ reload_source()
 cat(sprintf("pulling data from API \n"))
 data <- pull_data()
 
+#Reading in the country/admin1 lookup table and subsetting to just admin1 info
+admin_lookup1 <- read_csv("geo_lookup.csv")
+admin_lookup <- (admin_lookup1
+                 %>% select(adm1 = GID_1, adm1_name = NAME_1)
+                 %>% filter(!is.na(adm1))
+)
+
+
 #Columns that uniquely identify a record
 idCols <- c("record_id","geography_and_intro_timestamp",
             "email", "first_name", "last_name", "country", "country_name",
             "geography_and_intro_complete",
-            "admin_1_unit_and_updates_timestamp", "adm1",
+            "admin_1_unit_and_updates_timestamp", "adm1", "adm1_name",
             "national_entry", "adm_lowest", "no_updates")
 
 #Names of simple inverventions
@@ -208,7 +216,7 @@ contact_tracing_long <- function(survey_data, idCols, interven_name){
 
 
 #### Function to Create Long Version of Dataset ####
-#Function to create full long version
+
 create_long <- function(raw_survey_data, idCols){
 
   
@@ -221,6 +229,8 @@ create_long <- function(raw_survey_data, idCols){
                        admin_1_unit_and_updates_complete == "Complete")
             #Changing all factors to character
             %>% mutate_if(is.factor, as.character)
+            #Merging in the admin1 names
+            %>% left_join(admin_lookup, by = "adm1")
             #Renaming REDCap variables to match naming conventions
             %>% rename(closed_border_timestamp = border_closures_timestamp,
                        closed_border_complete = border_closures_complete,
@@ -289,7 +299,6 @@ create_long <- function(raw_survey_data, idCols){
   interven_df_simp <- combine_interven_simp(some_updates, idCols, interven_names_simp)
   #Creating long version for complex interventions
   border_dfL <- closed_border_long(some_updates, idCols, "closed_border")
-  
   screening_dfL <- symp_screening_long(some_updates, idCols, "symp_screening")
   restaurant_dfL <- restaurant_closed_long(some_updates, idCols, "restaurant_closed")
   contact_dfL <- contact_tracing_long(some_updates, idCols, "contact_tracing")
@@ -323,6 +332,7 @@ create_long <- function(raw_survey_data, idCols){
   )
 
 }
+
 
 #### Running Cleaning/Long Function ####
 
