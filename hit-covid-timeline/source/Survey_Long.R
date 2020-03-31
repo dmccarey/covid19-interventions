@@ -13,9 +13,9 @@ cat(sprintf("pulling data from API \n"))
 data <- pull_data()
 
 #Reading in the country/admin1 lookup table and subsetting to just admin1 info
-admin_lookup1 <- read_csv("geo_lookup.csv")
-admin_lookup <- (admin_lookup1
-                 %>% select(adm1 = GID_1, adm1_name = NAME_1)
+admin_lookup <- read_csv("geo_lookup.csv")
+admin_lookup2 <- (admin_lookup
+                 %>% select(adm1 = GID_1, admin1_name = NAME_1)
                  %>% filter(!is.na(adm1))
 )
 
@@ -24,7 +24,7 @@ admin_lookup <- (admin_lookup1
 idCols <- c("record_id","geography_and_intro_timestamp",
             "email", "first_name", "last_name", "country", "country_name",
             "geography_and_intro_complete",
-            "admin_1_unit_and_updates_timestamp", "adm1", "adm1_name",
+            "admin_1_unit_and_updates_timestamp", "adm1", "admin1_name",
             "national_entry", "adm_lowest", "no_updates")
 
 #Names of simple inverventions
@@ -230,7 +230,7 @@ create_long <- function(raw_survey_data, idCols){
             #Changing all factors to character
             %>% mutate_if(is.factor, as.character)
             #Merging in the admin1 names
-            %>% left_join(admin_lookup, by = "adm1")
+            %>% left_join(admin_lookup2, by = "adm1")
             #Renaming REDCap variables to match naming conventions
             %>% rename(closed_border_timestamp = border_closures_timestamp,
                        closed_border_complete = border_closures_complete,
@@ -318,7 +318,11 @@ create_long <- function(raw_survey_data, idCols){
                          %>% mutate(up = ifelse(up == "", "No Update", "Update"),
                                     required = ifelse(is.na(required) & req == "yes", "required",
                                                ifelse(is.na(required) & req == "no", "recommended",
-                                    required)))
+                                    required)),
+                                    #Removing non-unicode characters
+                                    details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
+                                    details = gsub("\\\xe9", "e", details),
+                                    record_id = as.numeric(record_id))
                          #Removing interventions that are incomplete no update
                          %>% filter(up == "Update" &
                                       (up_specific == "Update" | is.na(up_specific)),
