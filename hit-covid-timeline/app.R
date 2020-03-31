@@ -5,17 +5,18 @@ reload_source()
 ## some look table for countries and admin units
 admin_lookup <- read_csv("geo_lookup.csv")
 country_names <- setNames(admin_lookup$admin0,nm =admin_lookup$NAME_0 ) #%>% na.omit
+admin_names <- setNames(admin_lookup$GID_1,nm =admin_lookup$NAME_1 ) %>% na.omit
 
 ## set up data
 long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv")
 last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 
-interven_df_table <- long_data   %>% 
+interven_df_plot <- long_data   %>% 
     filter(complete == "Complete") %>% 
     select(record_id, entry_time = geography_and_intro_timestamp,
-           national_entry, country, admin1 = adm1,
-           locality = adm_lowest, intervention, intervention_specific,
-           status, subpopulation = pop, date_of_update = t,
+           national_entry, country, country_name, admin1 = adm1, admin1_name,
+           locality = adm_lowest, intervention_specific,
+           date_of_update = t, status, subpopulation = pop,
            required, enforcement, details) %>%
     mutate(status_simp = ifelse(status %in% c("closed", "fully closed",
                                               "fully restricted", "all",
@@ -27,6 +28,9 @@ interven_df_table <- long_data   %>%
                                 labels = c("open/no/no policy",
                                            "partially closed/partially restricted/\nrecommended/some",
                                            "closed/restricted/all/yes")))
+
+interven_df_table <- interven_df_plot   %>% 
+    select(-national_entry, -status_simp, -country, -admin1)
 
 
 # Define UI for application that draws a histogram
@@ -40,7 +44,7 @@ ui <- fluidPage(
         sidebarPanel(
             h2("Choose a location:", style = sprintf("color:%s", "steelblue")),
             selectInput("country_select",label = "Select a country:",choices = country_names,selectize = TRUE),
-            selectInput("admin_unit",label = "Select an admin1 unit:",choices = NULL,selectize = TRUE),
+            selectInput("admin_unit",label = "Select an admin1 unit:",choices = admin_names,selectize = TRUE),
              checkboxInput("include_national", label ="Include National Interventions?", value = TRUE, width = NULL)
         ),
 
@@ -85,7 +89,7 @@ server <- function(input, output,session) {
     ## make timeline plot
     output$timeline <- renderPlot({
         
-        tmp <- interven_df_table
+        tmp <- interven_df_plot
         
         if(input$include_national){
             # figure out which country
