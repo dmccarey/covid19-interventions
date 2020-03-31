@@ -63,7 +63,7 @@ ui <- fluidPage(
                 tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
             br(),
-            plotOutput("timeline"),
+            girafeOutput("timeline"),
             p("Below is a table of all the data to explore:"),
             dataTableOutput("overview_tab")
                 ),
@@ -107,7 +107,7 @@ server <- function(input, output,session) {
     )
     
     ## make timeline plot
-    output$timeline <- renderPlot({
+    output$timeline <- renderGirafe({
         
         tmp <- interven_df_plot
         
@@ -124,16 +124,27 @@ server <- function(input, output,session) {
         }
         
         
-        # can add back ggplotly later but this isn't so pretty without munging
-        #ggplotly(
-            ggplot(data = tmp %>% filter(admin1 %in% input$admin_unit),
+        ## creating tool tips for hover
+        ## can make this nicer later
+        tmp <- tmp %>% mutate(tooltip=paste0("record id: ",record_id,"\n",
+                                             "date: ",date_of_update,"\n",
+                                             "intervention: ",intervention_specific,"\n",
+                                             "status: ",status,"\n",
+                                             "subpopulation: ",subpopulation,"\n",
+                                             "required:",required,"\n",
+                                             "enforcement:",enforcement))
+            
+        gg <- ggplot(data = tmp %>% filter(admin1 %in% input$admin_unit),
                aes(x = date_of_update, y = intervention_specific,
                    shape = status_simp, 
                    color = national_entry)) +
-            geom_point(size = 3) + 
+                geom_point_interactive(aes(tooltip = tooltip,
+                                           data_id = record_id),size=3)+
+            #geom_point(size = 3) + 
             xlab("date of policy change") + 
             ylab("") + theme(legend.position="bottom") + theme_bw() + labs(color="National Policy?",shape="Policy Status")
-        #)
+        
+            girafe(ggobj = gg,width_svg = 12)
 
     })
 }
