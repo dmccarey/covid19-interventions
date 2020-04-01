@@ -47,7 +47,9 @@ ui <- fluidPage(
             h2("Choose a location:", style = sprintf("color:%s", "steelblue")),
             selectInput("country_select",label = "Select a country:",choices = country_names,selectize = TRUE),
             selectInput("admin_unit",label = "Select an admin1 unit:",choices = admin_names,selectize = TRUE),
-             checkboxInput("include_national", label ="Include National Interventions?", value = TRUE, width = NULL)
+             checkboxInput("include_national", label ="Include National Interventions?", value = TRUE, width = NULL),
+            br(),
+            downloadButton("download_data", label = "Download Current Data")
         ),
 
         # Show a plot of the generated distribution
@@ -63,9 +65,9 @@ ui <- fluidPage(
                          h4(sprintf("%.0f interventions logged",nrow(interven_df_plot))),
                          h4(sprintf("%.0f countries covered",n_distinct(interven_df_plot$country))),
                          br(),
-                         downloadButton("download_data", label = "Download Current Data"),
-                         br(),
-                         plotOutput('recordHeatmap')
+                         h4("Figure. Overview of recent updates"),
+                         leafletOutput("simp_map")
+                         #plotOutput('recordHeatmap')
                     ),
                 tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
@@ -74,8 +76,8 @@ ui <- fluidPage(
             p("Below is a table of all the data to explore:"),
             dataTableOutput("overview_tab")
                 ),
-            tabPanel("Map",
-                     leafletOutput("simp_map")
+            tabPanel("Maps",
+                     p("More to come soon")
                      )
             ))))
 
@@ -177,7 +179,7 @@ server <- function(input, output,session) {
 
     })
     
-    ## map
+    ## making simple map
     
     output$simp_map <- renderLeaflet({
         ## just a quick one with where we have data right now
@@ -249,8 +251,7 @@ server <- function(input, output,session) {
         ## bring in world map
         ## from https://exploratory.io/map
         world <- geojsonio::geojson_read("world.geojson", what = "sp") %>% st_as_sf 
-        
-        wd = left_join(world,simp_dat2 %>% rename(ISO_A3=country)) 
+        world <- merge(world,simp_dat2 %>% rename(ISO_A3=country)) 
                 
         
         pal <- colorFactor(
@@ -258,12 +259,12 @@ server <- function(input, output,session) {
             domain = simp_dat2$tLastUpdate)
         
         labels <- sprintf(
-            "<strong>%s</strong><br/>%s time since last update",
-            wd$NAME,wd$tLastUpdate
+            "<strong>%s</strong><br/>time since last update: %s",
+            world$NAME,world$tLastUpdate
         ) %>% lapply(htmltools::HTML)
         
         
-        leaflet(wd) %>% 
+        leaflet(world) %>% 
             addPolygons(fillColor = ~pal(tLastUpdate),
                         weight = 2,
                         opacity = 1,
