@@ -322,7 +322,10 @@ create_long <- function(raw_survey_data, idCols){
                                     #Removing non-unicode characters
                                     details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
                                     details = gsub("\\\xe9", "e", details),
-                                    record_id = as.numeric(record_id))
+                                    record_id = as.numeric(record_id),
+                                    timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%OS"),
+                                    #Adding date flag if intervention date is after date of entry
+                                    date_flag = t > timestamp)
                          #Removing interventions that are incomplete no update
                          %>% filter(up == "Update" &
                                       (up_specific == "Update" | is.na(up_specific)),
@@ -336,6 +339,8 @@ create_long <- function(raw_survey_data, idCols){
                          # cleaning up country names a little bit 
   ) %>% mutate(country_name = str_remove_all(country_name,"[^[:alnum:] ]"))
   
+  #Correcting dates (original dates in column t_original)
+  interven_dfL_clean2 <- clean_dates(interven_dfL_clean)
 }
 
 
