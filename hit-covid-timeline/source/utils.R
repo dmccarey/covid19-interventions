@@ -20,6 +20,11 @@ reload_source <- function(){
     if (!require('leaflet')) install.packages('leaflet'); library('leaflet')
     if (!require('geojsonio')) install.packages('geojsonio'); library('geojsonio')
     
+    if (!require('lubridate')) install.packages('lubridate'); library('lubridate')
+    if (!require('RColorBrewer')) install.packages('RColorBrewer'); library('RColorBrewer')
+    
+    
+    
     source("source/utils.R")
     ## load required packages not in reload_source()
 }

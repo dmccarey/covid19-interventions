@@ -56,10 +56,16 @@ ui <- fluidPage(
                 tabPanel("Overview",
                          br(),
                          h2("Welcome to the Health Intervention Tracking for COVID-19 Application"),
-                         h3(sprintf("%.0f interventions logged",nrow(interven_df_plot))),
-                         h3(sprintf("%.0f countries covered",n_distinct(interven_df_plot$country))),
+                         h3("Background"),
+                         h4("As the COVID-19 pandemic unfolds, massive government efforts are being made globally to try to reduce morbidity and mortality. Governments have taken a large range of actions, from broad-scale social distancing such as the forced lockdown of cities with mandatory home confinement, to behavior change campaigns to improve hand hygiene. Moreover, governments have implemented these measures at different points in time during the course of their epidemic."),
+                         h4("Major government mandated actions come with huge economic risks and many are asking if some of the most drastic actions are worth it. In order to start to understand how different public health policy interventions may have influenced COVID-19 transmission across the globe, we need detailed data on when and where specific policy interventions have been enacted over the course of this epidemic. The goal of this project is to provide a comprehensive database of public health policy at the first level administrative unit, to serve as a key component of assessments of the impact of these policies on COVID transmission dynamics and other changes in the health of affected populations. This living database will be maintained throughout the course of the pandemic with visual summaries of raw data made available publicly. "),
+                         h3("Progress"),
+                         h4(sprintf("%.0f interventions logged",nrow(interven_df_plot))),
+                         h4(sprintf("%.0f countries covered",n_distinct(interven_df_plot$country))),
                          br(),
-                         downloadButton("download_data", label = "Download Current Data")
+                         downloadButton("download_data", label = "Download Current Data"),
+                         br(),
+                         plotOutput('recordHeatmap')
                     ),
                 tabPanel("Timeline",
             includeMarkdown("include/heading_box.md"),
@@ -85,6 +91,26 @@ server <- function(input, output,session) {
             write_csv(interven_df_plot, file)
         }
     )
+    
+    #heatmap to see what records were added
+    output$recordHeatmap <- renderPlot({
+        
+        hmdf <-interven_df_plot  %>% group_by(date=floor_date(entry_time,unit="days")) %>%
+            summarize(records=n()) %>%
+            mutate(wd=wday(date,label=TRUE,abbr=TRUE),
+                   week=floor_date(date,unit="weeks")) 
+        
+        
+        hmdf %>% ggplot(aes(x=week,y=wd))+geom_tile(aes(fill=records))+
+            scale_fill_distiller("Records" ,
+                                 palette = "Blues",
+                                 direction = 1, 
+                                 na.value = "grey")+
+            theme_bw() + theme(axis.title = element_blank())
+        
+    })
+    
+    
 
     country_select <- reactive({
         filter(admin_lookup, admin0 == input$country_select)
@@ -156,35 +182,89 @@ server <- function(input, output,session) {
     output$simp_map <- renderLeaflet({
         ## just a quick one with where we have data right now
         ## and last update
-        simp_dat <- long_data %>% 
+        # simp_dat <- long_data %>%
+        #     group_by(country) %>%
+        #     summarize(n = n(),
+        #               n_national = sum(national_entry=="Yes"),
+        #               n_admin1 = n_distinct(adm1)) %>%
+        #     left_join(admin_lookup %>% rename(country=admin0) %>% select(country),.) %>%
+        #     distinct %>%
+        #     mutate(n=replace_na(n,0),
+        #            n_national=replace_na(n_national,0),
+        #            n_admin1 = replace_na(n_admin1,0)
+        #     )
+        # 
+        # ## bring in world map
+        # ## from https://exploratory.io/map
+        # world <- geojsonio::geojson_read("world.geojson", what = "sp") %>% st_as_sf 
+        # 
+        # wd = left_join(world,simp_dat %>% rename(ISO_A3=country))
+        # 
+        # pal <- colorNumeric(
+        #     palette = "YlOrRd",
+        #     domain = simp_dat$n)
+        # 
+        # labels <- sprintf(
+        #     "<strong>%s</strong><br/>%s intervention changes logged<br/>%s intervention changes logged nationally <br/>%s administrative units with data",
+        #     wd$NAME,wd$n,wd$n_national, wd$n_admin1
+        # ) %>% lapply(htmltools::HTML)
+        # 
+        # 
+        # leaflet(wd) %>% 
+        #     addPolygons(fillColor = ~pal(n),
+        #                 weight = 2,
+        #                 opacity = 1,
+        #                 color = "white",
+        #                 dashArray = "3",
+        #                 fillOpacity = 0.6,
+        #                 highlight = highlightOptions(
+        #                     weight = 5,
+        #                     color = "#666",
+        #                     dashArray = "",
+        #                     fillOpacity = 0.7,
+        #                     bringToFront = TRUE),
+        #                 label = labels,
+        #                 labelOptions = labelOptions(
+        #                     style = list("font-weight" = "normal", padding = "3px 8px"),
+        #                     textsize = "15px",
+        #                     direction = "auto")) %>% 
+        #     addLegend("bottomleft", pal = pal, values = ~n_national,
+        #               title = "Number of interventions logged",
+        #               opacity = .6
+        #     )
+        # 
+        
+        #Last updated world map
+        simp_dat2 <- interven_df_plot %>% 
             group_by(country) %>% 
-            summarize(n = n(),
-                      n_national = sum(national_entry=="Yes"),
-                      n_admin1 = n_distinct(adm1)) %>% 
-            left_join(admin_lookup %>% rename(country=admin0) %>% select(country),.) %>% 
-            distinct %>% 
-            mutate(n=replace_na(n,0),
-                   n_national=replace_na(n_national,0),
-                   n_admin1 = replace_na(n_admin1,0)
-            )
+            summarize(latestUpdate = max(entry_time)) %>%
+            mutate(tLastUpdate=as.numeric((Sys.time()-latestUpdate)/24))%>%
+            left_join(admin_lookup %>% rename(country=admin0) %>% select(country),.) %>%
+            distinct %>%
+            mutate(tLastUpdate=ifelse(is.na(tLastUpdate),999,tLastUpdate)) %>%
+            mutate(tLastUpdate=cut(tLastUpdate,c(0,1,7,14,999,1000),right = FALSE,
+                                   labels=c("<24 hrs","1-7 days",
+                                            "8-14 days",">2 weeks","Never")))
+        
         ## bring in world map
         ## from https://exploratory.io/map
         world <- geojsonio::geojson_read("world.geojson", what = "sp") %>% st_as_sf 
         
-        wd = left_join(world,simp_dat %>% rename(ISO_A3=country))
+        wd = left_join(world,simp_dat2 %>% rename(ISO_A3=country)) 
+                
         
-        pal <- colorNumeric(
+        pal <- colorFactor(
             palette = "YlOrRd",
-            domain = simp_dat$n)
+            domain = simp_dat2$tLastUpdate)
         
         labels <- sprintf(
-            "<strong>%s</strong><br/>%s intervention changes logged<br/>%s intervention changes logged nationally <br/>%s administrative units with data",
-            wd$NAME,wd$n,wd$n_national, wd$n_admin1
+            "<strong>%s</strong><br/>%s time since last update",
+            wd$NAME,wd$tLastUpdate
         ) %>% lapply(htmltools::HTML)
         
         
         leaflet(wd) %>% 
-            addPolygons(fillColor = ~pal(n),
+            addPolygons(fillColor = ~pal(tLastUpdate),
                         weight = 2,
                         opacity = 1,
                         color = "white",
@@ -200,9 +280,10 @@ server <- function(input, output,session) {
                         labelOptions = labelOptions(
                             style = list("font-weight" = "normal", padding = "3px 8px"),
                             textsize = "15px",
-                            direction = "auto")) %>% 
-            addLegend("bottomleft", pal = pal, values = ~n_national,
-                      title = "Number of interventions logged",
+                            direction = "auto")
+                        ) %>%
+            addLegend("bottomleft", pal = pal, values = ~tLastUpdate,
+                      title = "Time since last update",
                       opacity = .6
             )
     })
