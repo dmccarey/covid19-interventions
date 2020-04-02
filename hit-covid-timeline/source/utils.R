@@ -18,7 +18,7 @@ reload_source <- function(){
     if (!require('sf')) install.packages('sf'); library('sf')
     if (!require('sp')) install.packages('sp'); library('sp')
     if (!require('leaflet')) install.packages('leaflet'); library('leaflet')
-    if (!require('geojsonio')) install.packages('geojsonio'); library('geojsonio')
+    #if (!require('geojsonio')) install.packages('geojsonio'); library('geojsonio')
     
     if (!require('lubridate')) install.packages('lubridate'); library('lubridate')
     if (!require('RColorBrewer')) install.packages('RColorBrewer'); library('RColorBrewer')
