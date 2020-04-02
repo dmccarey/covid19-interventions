@@ -83,3 +83,25 @@ get_long_data <- function(fresh_pull=FALSE,
 
     return(rc)
 }
+
+
+#' Function to clean dates
+#' returns column t with clean date and t_original with original date
+#' @param data Long version of dataset with column name 't'
+#' 
+clean_dates <- function(data){
+    data <- data %>%
+        rename(t_original = t) %>%
+        mutate(t_month = month(t_original),
+               t_day = day(t_original),
+               t_year = year(t_original),
+               t_new = as.character(make_date(year = t_year,
+                                                  month = t_month - 1,
+                                                  day = t_day)),
+               t_old = as.character(t_original),
+               t = as.POSIXct(ifelse(!is.na(date_flag) & date_flag == TRUE,
+                                             t_new, t_old))) %>%
+        select(-t_day, -t_year, -t_month, -t_old, -t_new)
+    return(data)
+}
+
