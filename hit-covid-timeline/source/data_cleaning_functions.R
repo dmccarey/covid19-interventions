@@ -312,7 +312,9 @@ restaurant_closed_long <- function(data, idCols){
   interven_df <- data[, c(idCols, names(data)[grepl("restaurant", names(data))])] %>%
     rename(restaurant_reduced = restaurant_reduced_up,
            restaurant_reduced_size = restaurant_reduced_max) %>%
-    mutate(restaurant_closed = restaurant_closed_up)
+    mutate(restaurant_closed = restaurant_closed_up,
+           restaurant_reduced = ifelse(restaurant_reduced == "no", "",
+                                       restaurant_reduced))
   
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
@@ -337,7 +339,12 @@ contact_tracing_long <- function(data, idCols){
            contact_quarantine_status = contact_tracing_quarantine) %>%
     rename(contact_quarantine_t = contact_tracing_quarantine_t,
            contact_quarantine_details = contact_tracing_quarantine_details,
-           contact_quarantine = contact_tracing_quarantine)
+           contact_quarantine = contact_tracing_quarantine) %>%
+  # If contact_quarantine date is missing, set to contact_tracing date
+    mutate(contact_quarantine_t = as.POSIXct(ifelse(is.na(contact_quarantine_t),
+                                                    contact_tracing_t,
+                                                    contact_quarantine_t),
+                                             origin = "1970-01-01"))
   
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
