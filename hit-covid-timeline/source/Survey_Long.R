@@ -107,15 +107,20 @@ unite_testing <- function(data){
                          testing_asymp_pop = ""))
 }
 
-#' Function to clean dates
+
+#' Function to clean dates 
 #' 
 #' @param dataL Long version of dataset with column name 't' and 'timestamp'
 #' @param error_window How many days ahead of the date of entry is the intervention date
 #' considered an error (default is 2)
-#' @return data with t replaced with clean date and t_original with original date
-#' and returns a column called date_flag which is TRUE if the intervention date
-#' is after the date of entry and date_error if the intervention date is in
-#' the same month 
+#' @return long dataset with the following changes:
+#'     A column called date_flag which is TRUE if the intervention date
+#'     is after the date of entry
+#'     A column called date_error if the intervention date is in the same month
+#'     and more than the the error_window number of days after the date of entry.
+#'     A column called t_original which maintains the original date (value of t)
+#'     The column t replaced with the new date - corrected to the month before if
+#'     date_error = TRUE
 clean_dates <- function(dataL, error_window = 2){
   
   dataL2 <- dataL %>%
@@ -317,9 +322,6 @@ contact_tracing_long <- function(data, idCols, interven_name){
 #Function to combine all of the individual long datasets into one
 combine_interven <- function(data){
   
-  #Subsetting to rows with some updates
-  some_updates <- data[data$no_updates == FALSE, ]
-  
   #Creating long version for simple interventions
   interven_df_simp <- combine_interven_simp(some_updates, idCols, interven_names_simp)
   #Creating long version for complex interventions
@@ -344,7 +346,9 @@ combine_interven <- function(data){
 
 #### Function to Create Long Version of Dataset ####
 
-create_long <- function(data, idCols){
+create_long <- function(data, idCols, error_window = 2){
+  
+  ## Intial Cleaning ##
   
   #Subsetting to rows with completed geography and admin1 (valid entries)
   data2 <- data  %>%
@@ -363,47 +367,64 @@ create_long <- function(data, idCols){
   #Uniting the testing criteria for symptomatic and asymptomatic patients
   data4 <- unite_testing(data3)
 
+  
+  ## Creating long version of dataset ##
+  
+  #Subsetting to rows with some updates
+  some_updates <- data4[data4$no_updates == FALSE, ]
   #Creating long version of the survey data
   dataL <- combine_interven(data4)
 
+  # #Subsetting to rows with no updates at all
+  # #Note right now this is not included in the dataset becaue probably not of interest
+  # #But can be added in the future if desired
+  # no_updates <- data4[data4$no_updates == TRUE, idCols]
   
   
-  #### Final cleaning ####
+  ## Final cleaning ##
   
-  #Subsetting to rows with no updates at all
-  no_updates <- data2[data2$no_updates == TRUE, idCols]
-  
-  #Final cleaning including
-  interven_dfL_clean <- (interven_dfL
-                         %>% mutate(up = ifelse(up == "", "No Update", "Update"),
-                                    required = ifelse(is.na(required) & req == "yes", "required",
-                                               ifelse(is.na(required) & req == "no", "recommended",
+  dataL_clean <- dataL %>%
+    
+    mutate(record_id = as.numeric(record_id),
+           #Recoding update
+           up = ifelse(up == "", "No Update", "Update"),
+           #Combining req and required (same question)
+           required = ifelse(is.na(required) & req == "yes", "required",
+                             ifelse(is.na(required) & req == "no", "recommended",
                                     required)),
-                                    #Removing non-unicode characters
-                                    details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
-                                    details = gsub("\\\xe9", "e", details),
-                                    record_id = as.numeric(record_id))
-                         #Removing interventions that are incomplete no update
-                         %>% filter(up == "Update" &
-                                      (up_specific == "Update" | is.na(up_specific)),
-                                    complete == "Complete")
-                         #Not adding rows which intentionally denote no update for now
-                         #%>% bind_rows(no_updates)
-                         %>% replace_na(list(national_entry = "No"))
-                         #Removing names and emails and req (combined with required above)
-                         #%>% select(-first_name, -last_name, -email, -req, -no_updates,
-                         #           -geography_and_intro_complete)
-                         # cleaning up country names a little bit 
-  ) %>% mutate(country_name = str_remove_all(country_name,"[^[:alnum:] ]"))
+           #Removing non-unicode characters
+           details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
+           details = gsub("\\\xe9", "e", details),
+           # cleaning up country names a little bit 
+           country_name = str_remove_all(country_name,"[^[:alnum:] ]")) %>%
+    replace_na(list(national_entry = "No")) %>%
+    
+    #Removing interventions that are incomplete no update
+    filter(up == "Update" &
+             (up_specific == "Update" | is.na(up_specific)),
+           complete == "Complete") %>%
+    
+    #Removing names and emails and req (combined with required above)
+    select(-first_name, -last_name, -email, -req, -no_updates,
+           -geography_and_intro_complete) %>%
+    
+    #Arranging by record_id
+    arrange(record_id)
+                         
   
   #Correcting dates (original dates in column t_original)
-  interven_dfL_clean2 <- clean_dates(interven_dfL_clean)
+  dataL_clean2 <- clean_dates(dataL_clean, error_window = error_window)
+  
+  return(dataL_clean2)
 }
 
 
 #### Running Cleaning/Long Function ####
 
-interven_dfL_clean <- create_long(data, idCols)
+dataL_clean2 <- create_long(data, idCols, error_window = 2)
 
 cat(sprintf("Saving long file at %s \n",out_file_path))
-write.csv(interven_dfL_clean, out_file_path, row.names = FALSE)
+write.csv(dataL_clean2, out_file_path, row.names = FALSE)
+
+
+
