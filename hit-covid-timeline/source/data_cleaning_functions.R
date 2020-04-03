@@ -31,7 +31,10 @@ rename_cols <- function(data){
            mask_timestamp = universal_face_mask_policies_timestamp,
            mask_complete = universal_face_mask_policies_complete,
            enforcement_deployed_timestamp = military_and_police_deployment_timestamp,
-           enforcement_deployed_complete = military_and_police_deployment_complete)
+           enforcement_deployed_complete = military_and_police_deployment_complete,
+           iso_details = isolation_desc,
+           quar_iso_timestamp = quarantine_and_homeisolation_timestamp,
+           quar_iso_complete = quarantine_and_homeisolation_complete)
   
   names(data2) <- gsub("updated_domains___", "", names(data2))
   names(data2) <- gsub("tomatic_individuals", "", names(data2))
@@ -48,7 +51,7 @@ rename_cols <- function(data){
 #' individuals collapsed as one string into the 'pop' column
 unite_testing <- function(data){
   
-  data %>%
+  data2 <- data %>%
     # Replacing "" with NA
     replace_with_na(list(testing_symp_elg___1 = "",
                          testing_symp_elg___2 = "",
@@ -79,6 +82,8 @@ unite_testing <- function(data){
     # Again replacing "" with NA
     replace_with_na(list(testing_symp_pop = "",
                          testing_asymp_pop = ""))
+  
+  return(data2)
 }
 
 
@@ -280,7 +285,7 @@ school_closed_long <- function(data, idCols){
   
   # Names of the specific interventions
   specific_names <- c("nursery_school_closed", "primary_school_closed",
-                      "sec_school_closed", "postsec_school_closed",
+                      "sec_school_closed", "post_school_closed",
                       "unknown_school_closed")
   
   #Subsetting and renaming columns
@@ -288,8 +293,13 @@ school_closed_long <- function(data, idCols){
     rename(nursery_school_closed = school_closed_specific___1,
            primary_school_closed = school_closed_specific___2,
            sec_school_closed = school_closed_specific___3,
-           postsec_school_closed = school_closed_specific___4,
-           unknown_school_closed = school_closed_specific___9)
+           post_school_closed = school_closed_specific___4,
+           unknown_school_closed = school_closed_specific___9,
+           post_school_closed_status = postsec_school_closed_status,
+           post_school_closed_pop = postsec_school_closed_pop,
+           post_school_closed_req = postsec_school_closed_req,
+           post_school_closed_t = postsec_school_closed_t,
+           post_school_closed_details = postsec_school_closed_details)
   
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
@@ -322,29 +332,27 @@ restaurant_closed_long <- function(data, idCols){
   return(interven_dfL)
 }
 
-#' Function to create cleaned version of contact_tracing; runs combine_interven_comp()
+#' Function to create cleaned version of quar_iso; runs combine_interven_comp()
 #' @param data wide verison of survey data
 #' @param idCols vector of column names that uniquely identify an entry
-#' @return a long dataframe for the specific interventions grouped into contact_tracing
-contact_tracing_long <- function(data, idCols){
+#' @return a long dataframe for the specific interventions grouped into quar_iso
+quar_iso_long <- function(data, idCols){
   
-  interven_name <- "contact_tracing"
+  interven_name <- "quar_iso"
   
   # Names of the specific interventions
-  specific_names <- c("contact_tracing", "contact_quarantine")
+  specific_names <- c("quar_travel", "quar_confirm", "quar_suspect", "quar_other",
+                      "iso_suspect", "iso_confirm", "iso_discharged")
   
   # Subsetting and renaming columns
-  interven_df <- data[, c(idCols, names(data)[grepl(interven_name, names(data))])] %>%
-    mutate(contact_tracing = contact_tracing_up,
-           contact_quarantine_status = contact_tracing_quarantine) %>%
-    rename(contact_quarantine_t = contact_tracing_quarantine_t,
-           contact_quarantine_details = contact_tracing_quarantine_details,
-           contact_quarantine = contact_tracing_quarantine) %>%
-  # If contact_quarantine date is missing, set to contact_tracing date
-    mutate(contact_quarantine_t = as.POSIXct(ifelse(is.na(contact_quarantine_t),
-                                                    contact_tracing_t,
-                                                    contact_quarantine_t),
-                                             origin = "1970-01-01"))
+  interven_df <- data[, c(idCols, names(data)[grepl("quar_|iso_", names(data))])] %>%
+    rename(quar_travel = quar_pop___1,
+           quar_confirm = quar_pop___2,
+           quar_suspect = quar_pop___3,
+           quar_other = quar_pop___4,
+           iso_suspect = iso_pop___1,
+           iso_confirm = iso_pop___2,
+           iso_discharged = iso_pop___3)
   
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
@@ -372,7 +380,7 @@ combine_interven <- function(data, idCols, interven_names_simp){
   school_dfL <- school_closed_long(data, idCols)
   screening_dfL <- symp_screening_long(data, idCols)
   restaurant_dfL <- restaurant_closed_long(data, idCols)
-  contact_dfL <- contact_tracing_long(data, idCols)
+  quar_dfL <- quar_iso_long(data, idCols)
   
   # Combining all of the intervention datasets 
   dataL <- bind_rows(border_dfL,
@@ -380,7 +388,7 @@ combine_interven <- function(data, idCols, interven_names_simp){
                      interven_df_simp,
                      screening_dfL,
                      restaurant_dfL,
-                     contact_dfL)
+                     quar_dfL)
   return(dataL)
 }
 
@@ -453,9 +461,11 @@ create_long <- function(data, idCols, interven_names_simp, error_window = 2){
     replace_na(list(national_entry = "No")) %>%
     
     # Removing interventions that are incomplete no update
+    # Also removing fake entries
     filter(up == "Update" &
              (up_specific == "Update" | is.na(up_specific)),
-           complete == "Complete") %>%
+           complete == "Complete",
+           !grepl("fake", email)) %>%
     
     # Removing names and emails and req (combined with required above)
     select(-first_name, -last_name, -email, -req, -no_updates,

@@ -26,9 +26,16 @@ symp_screening_within,Symptom screening at checkpoints within borders
 nursery_school_closed,Nursery school closures
 primary_school_closed,Primary school closures
 sec_school_closed,Secondary school closures
-postsec_school_closed,Post-secondary school closures
+post_school_closed,Post-secondary school closures
 unknown_school_closed,School closures of unknown type
 restaurant_closed,Restaurant closures (excluding takeout/delivery)
 restaurant_reduced,Limiting number of patrons in restaurants
-contact_tracing,Contact Tracing
-contact_quarantine,Quartanining of Contacts
+contact_tracing,Contact tracing
+contact_quarantine,Quartanining of contacts
+quar_travel,Quartanining of travelers
+quar_confirm,Quartanining of contacts confirmed cases
+quar_suspect,Quartanining of contacts suspected (symptomatic) cases
+quar_other,Quarantining of other asymptomatic individuals
+iso_suspect,Home isolation of suspected (symptomatic) cases
+iso_confirm,Home isolation of non-hospitalized confirmed cases
+iso_discharged,Home isolation of confirmed cases discharged from the hospital

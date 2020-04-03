@@ -32,8 +32,8 @@ idCols <- c("record_id","geography_and_intro_timestamp",
 interven_names_simp <- c("limited_mvt", "household_confined", "nursing_home_closed",
                          "office_closed", "entertainment_closed", "store_closed",
                          "public_transport_closed", "public_space_closed", "social_group_limits",
-                         "testing_symp", "testing_asymp", "mask", "enforcement_deployed",
-                         "state_of_emergency")
+                         "contact_tracing", "testing_symp", "testing_asymp", "mask", 
+                         "enforcement_deployed", "state_of_emergency")
 
 
 
