@@ -369,7 +369,7 @@ combine_interven <- function(data, idCols, interven_names_simp){
   
   # Creating long version for complex interventions
   border_dfL <- closed_border_long(data, idCols)
-  school_dfL <- symp_screening_long(data, idCols)
+  school_dfL <- school_closed_long(data, idCols)
   screening_dfL <- symp_screening_long(data, idCols)
   restaurant_dfL <- restaurant_closed_long(data, idCols)
   contact_dfL <- contact_tracing_long(data, idCols)
