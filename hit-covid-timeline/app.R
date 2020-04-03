@@ -11,7 +11,7 @@ admin_names <- setNames(admin_lookup$GID_1,nm =admin_lookup$NAME_1 ) %>% na.omit
 interven_names <- read_csv("intervention_lookup.csv")
 
 ## set up data
-long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv")
+long_data <- get_long_data(fresh_pull = FALSE,long_file_path = "generated_data/survey_data_long.csv",remove_names=TRUE)
 last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 
 interven_df_plot <- long_data   %>% 

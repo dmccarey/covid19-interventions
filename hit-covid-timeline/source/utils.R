@@ -66,10 +66,21 @@ pull_data <- function(api_path = "private/api_token.txt",
 #' @param long_file_path path to where the std long file is saved
 #' csv file
 get_long_data <- function(fresh_pull=FALSE,
-                          long_file_path="generated_data/survey_data_long.csv"){
+                          long_file_path="generated_data/survey_data_long.csv",
+                          ...){
     
     if(fresh_pull){
-        source("source/Survey_Long.R")
+        cat(sprintf("pulling data from API \n"))
+        source("source/utils.R")
+        reload_source()
+        source("source/data_cleaning_functions.R")
+        data <- pull_data()
+        
+        # cleaning
+        dataL_clean <- create_long(data, error_window = 2,...)
+        
+        cat(sprintf("Saving long file at %s \n",out_file_path))
+        write.csv(dataL_clean, long_file_path, row.names = FALSE)
     } 
     
     rc <- tryCatch({

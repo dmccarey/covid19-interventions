@@ -1,6 +1,5 @@
 #Functions used to clean the dataset for visuralization, analyses, and sharing
 
-
 #### Data cleaning functions ####
 
 #' Funtion to rename columns to match naming scheme
@@ -393,9 +392,6 @@ combine_interven <- function(data, idCols, interven_names_simp){
 }
 
 
-
-
-
 #### Creating Cleaned Long Version of Dataset ####
 
 #' Function to create cleaned long version of the dataset
@@ -405,11 +401,31 @@ combine_interven <- function(data, idCols, interven_names_simp){
 #' (should be prefix of the column names) 
 #' @param error_window number days ahead of the date of entry is the intervention date
 #' and represents a calendar entry error so should be recoded to the month before (default is 2)
+#' @param remove_names flag for whether we remove data enty people's names and emails
 #' @return a long version of the survey data with only the rows that represent updates to the
 #' interventions and removing names and emails for public use
-create_long <- function(data, idCols, interven_names_simp, error_window = 2){
+create_long <- function(data, 
+                        idCols=c("record_id","geography_and_intro_timestamp",
+                                 "email", "first_name", "last_name", "country", "country_name",
+                                 "geography_and_intro_complete",
+                                 "admin_1_unit_and_updates_timestamp", "adm1", "admin1_name",
+                                 "national_entry", "adm_lowest", "no_updates"), 
+                        interven_names_simp=c("limited_mvt", "household_confined", "nursing_home_closed",
+                                              "office_closed", "entertainment_closed", "store_closed",
+                                              "public_transport_closed", "public_space_closed", "social_group_limits",
+                                              "contact_tracing", "testing_symp", "testing_asymp", "mask", 
+                                              "enforcement_deployed", "state_of_emergency"),
+                        error_window = 2, 
+                        remove_names=TRUE){
   
   ## Intial Cleaning ##
+  
+  # Reading in the country/admin1 lookup table and subsetting to just admin1 info
+  admin_lookup <- read_csv("geo_lookup.csv")
+  admin_lookup2 <- (admin_lookup
+                    %>% select(adm1 = GID_1, admin1_name = NAME_1)
+                    %>% filter(!is.na(adm1))
+  )
   
   # Subsetting to rows with completed geography and admin1 (valid entries)
   data2 <- data  %>%
@@ -468,12 +484,16 @@ create_long <- function(data, idCols, interven_names_simp, error_window = 2){
            !grepl("fake", email)) %>%
     
     # Removing names and emails and req (combined with required above)
-    select(-first_name, -last_name, -email, -req, -no_updates,
+    select(-req, -no_updates,
            -geography_and_intro_complete) %>%
     
     # Arranging by record_id
     arrange(record_id)
   
+  if(remove_names){
+    dataL_clean <- dataL_clean %>% mutate(data_entry_by = paste0(substr(first_name,1,1),".",substr(last_name,1,1),".")) %>% 
+      select(-first_name, -last_name, -email)
+  }
   
   # Correcting dates (original dates in column t_original)
   dataL_clean2 <- clean_dates(dataL_clean, error_window = error_window)
