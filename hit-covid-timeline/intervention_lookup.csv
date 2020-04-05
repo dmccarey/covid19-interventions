@@ -3,7 +3,7 @@ limited_mvt,Limiting movement within borders
 household_confined,Household confinement
 nursing_home_closed,Nursing home/long-term care closures
 office_closed,Office closures
-entertainment_closed,"Leisure, entertaiment, and religious venue closures"
+entertainment_closed,"Leisure, entertainment, and religious venue closures"
 store_closed,Retail store closures (excluding essentials)
 public_transport_closed,Public transportation closures
 public_space_closed,Public space closures
@@ -31,11 +31,11 @@ unknown_school_closed,School closures of unknown type
 restaurant_closed,Restaurant closures (excluding takeout/delivery)
 restaurant_reduced,Limiting number of patrons in restaurants
 contact_tracing,Contact tracing
-contact_quarantine,Quartanining of contacts
-quar_travel,Quartanining of travelers
-quar_confirm,Quartanining of contacts confirmed cases
-quar_suspect,Quartanining of contacts suspected (symptomatic) cases
-quar_other,Quarantining of other asymptomatic individuals
+contact_quarantine, Quartanine of contacts
+quar_travel,Quartanine of travelers
+quar_confirm, Quartanine of contacts confirmed cases
+quar_suspect, Quartanine of contacts suspected (symptomatic) cases
+quar_other, Quartanine of other asymptomatic individuals
 iso_suspect,Home isolation of suspected (symptomatic) cases
 iso_confirm,Home isolation of non-hospitalized confirmed cases
 iso_discharged,Home isolation of confirmed cases discharged from the hospital
