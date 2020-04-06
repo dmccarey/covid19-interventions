@@ -109,3 +109,25 @@ get_long_data <- function(fresh_pull=FALSE,
 }
 
 
+#' takes national observations and propagates them
+#' to all children for visuralization purposes
+#' note: this does not do anything to specify if local policy trumps national policy
+#' @param fresh_pull generate directly from server?
+#' @param long_file_path path to where the std long file is saved
+#' csv file
+propagate_down_national <- function(long_data,
+                                    lookup_loc="geo_lookup.csv"){
+    
+    geo <- read_csv(lookup_loc)
+    
+    nationals <- long_data %>% filter(national_entry=="Yes")
+    
+    ## filling out national entry to all children
+    filled_out <- left_join(nationals,geo %>% rename(country=admin0)) %>% data.frame
+    
+    rc <- bind_rows(long_data %>% filter(national_entry=="No"),filled_out)
+    
+    return(rc)
+}
+
+
