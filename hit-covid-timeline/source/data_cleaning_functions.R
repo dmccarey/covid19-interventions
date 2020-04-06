@@ -303,6 +303,11 @@ school_closed_long <- function(data, idCols){
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
   
+  # Making status unknown for unknown_school_closed
+  interven_dfL <-interven_dfL %>%
+    mutate(status = ifelse(intervention_specific == "unknown_school_closed",
+                                 "unknown", status))
+  
   return(interven_dfL)
 }
 
@@ -422,10 +427,9 @@ create_long <- function(data,
   
   # Reading in the country/admin1 lookup table and subsetting to just admin1 info
   admin_lookup <- read_csv("geo_lookup.csv")
-  admin_lookup2 <- (admin_lookup
-                    %>% select(adm1 = GID_1, admin1_name = NAME_1)
-                    %>% filter(!is.na(adm1))
-  )
+  admin_lookup2 <- admin_lookup %>% 
+                   select(adm1 = GID_1, admin1_name = NAME_1) %>%
+                   filter(!is.na(adm1))
   
   # Subsetting to rows with completed geography and admin1 (valid entries)
   data2 <- data  %>%
