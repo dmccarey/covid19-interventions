@@ -23,7 +23,7 @@ interven_df_plot <- long_data   %>%
            national_entry, country, country_name, admin1 = adm1, admin1_name,
            locality = adm_lowest, intervention_clean,
            date_of_update = t, status, subpopulation = pop,
-           required, enforcement, size, duration, details) %>%
+           required, enforcement, size, duration, test_pop, details) %>%
     mutate(status_simp = ifelse(status %in% c("all",
                                               "closed",
                                               "complete contact tracing",
