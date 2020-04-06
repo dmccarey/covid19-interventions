@@ -84,7 +84,20 @@ get_long_data <- function(fresh_pull=FALSE,
     } 
     
     rc <- tryCatch({
-        read_csv(long_file_path)
+        read_csv(long_file_path,
+                 col_types = cols(
+            record_id = col_double(),
+            geography_and_intro_timestamp = col_datetime(format = ""),
+            admin_1_unit_and_updates_timestamp = col_datetime(format = ""),
+            timestamp = col_datetime(format = ""),
+            t_original = col_date(format = ""),
+            size = col_double(),
+            duration = col_double(),
+            date_flag = col_logical(),
+            date_error = col_logical(),
+            t = col_date(format = "")
+        )
+        )
         },
         error=function(x){
          message(sprintf("file %s doesn't seem to exist \n",long_file_path))
