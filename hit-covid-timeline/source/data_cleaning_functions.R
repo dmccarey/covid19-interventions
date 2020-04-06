@@ -68,19 +68,19 @@ unite_testing <- function(data){
                          testing_asymp_elg___6 = "")) %>%
     
     # Combining the symptomatic conditions under the 'pop' column
-    unite(testing_symp_pop, testing_symp_elg___1, testing_symp_elg___2,
+    unite(testing_symp_test_pop, testing_symp_elg___1, testing_symp_elg___2,
           testing_symp_elg___3, testing_symp_elg___4, testing_symp_elg___5,
           testing_symp_elg___6, testing_symp_elg___7, testing_symp_elg___8,
           sep = ";", na.rm = TRUE, remove = TRUE) %>%
     
     # Combining the asymptomatic conditions under the 'pop' column
-    unite(testing_asymp_pop, testing_asymp_elg___1, testing_asymp_elg___2,
+    unite(testing_asymp_test_pop, testing_asymp_elg___1, testing_asymp_elg___2,
           testing_asymp_elg___3, testing_asymp_elg___4, testing_asymp_elg___5,
           testing_asymp_elg___6, sep = ";", na.rm = TRUE, remove = TRUE) %>%
     
     # Again replacing "" with NA
-    replace_with_na(list(testing_symp_pop = "",
-                         testing_asymp_pop = ""))
+    replace_with_na(list(testing_symp_test_pop = "",
+                         testing_asymp_test_pop = ""))
   
   return(data2)
 }
@@ -469,10 +469,13 @@ create_long <- function(data,
     mutate(record_id = as.numeric(record_id),
            # Recoding update
            up = ifelse(up == "", "No Update", "Update"),
-           # Combining req and required (same question)
-           required = ifelse(is.na(required) & req == "yes", "required",
-                             ifelse(is.na(required) & req == "no", "recommended",
-                                    required)),
+           # Combining req and required (same question) and adding information from status
+           required = ifelse((!is.na(req) & req == "yes") | 
+                               (!is.na(status) & status == "required"), "required",
+                      ifelse((!is.na(req) & req == "no") |
+                               (!is.na(status) & status == "recommended"), "recommended",
+                      ifelse((!is.na(req) & req == "unknown"), "unknown",
+                                    required))),
            # Removing non-unicode characters
            details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
            details = gsub("\\\xe9", "e", details),
@@ -480,14 +483,14 @@ create_long <- function(data,
            country_name = str_remove_all(country_name,"[^[:alnum:] ]")) %>%
     replace_na(list(national_entry = "No")) %>%
     
-    # Removing interventions that are incomplete no update
+    # Removing interventions that are incomplete: no update
     # Also removing fake entries
     filter(up == "Update" &
              (up_specific == "Update" | is.na(up_specific)),
            complete == "Complete",
            !grepl("fake", email)) %>%
     
-    # Removing names and emails and req (combined with required above)
+    # Removing columns that aren't of interest
     select(-req, -no_updates,
            -geography_and_intro_complete) %>%
     
