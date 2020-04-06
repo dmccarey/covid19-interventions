@@ -24,16 +24,26 @@ interven_df_plot <- long_data   %>%
            locality = adm_lowest, intervention_clean,
            date_of_update = t, status, subpopulation = pop,
            required, enforcement, size, duration, details) %>%
-    mutate(status_simp = ifelse(status %in% c("closed", "fully closed",
-                                              "fully restricted", "all",
-                                              "required", "yes"), 3,
-                                ifelse(status %in% c("partially closed", "partially restricted",
-                                                     "recommended", "some"), 2,
-                                       ifelse(status %in% c("open", "no", "no policy"), 1, status))),
+    mutate(status_simp = ifelse(status %in% c("all",
+                                              "closed",
+                                              "complete contact tracing",
+                                              "fully restricted",
+                                              "required",
+                                              "yes"), 1,
+                                ifelse(status %in% c("partial contact tracing",
+                                                     "partially closed",
+                                                     "partially restricted",
+                                                     "recommended",
+                                                     "some"), 2,
+                                       ifelse(status %in% c("open",
+                                                            "no",
+                                                            "no policy",
+                                                            "none",
+                                                            "unrestricted"), 3, status))),
            status_simp = factor(status_simp, levels = c(1, 2, 3),
-                                labels = c("open/no/no policy",
+                                labels = c("closed/restricted/all/yes",
                                            "partially closed/partially restricted/\nrecommended/some",
-                                           "closed/restricted/all/yes")))
+                                           "open/no/no policy/none/unrestricted")))
 
 
 # Define UI for application that draws a histogram
