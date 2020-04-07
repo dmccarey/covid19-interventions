@@ -18,6 +18,10 @@ reload_source <- function(){
     if (!require('sf')) install.packages('sf'); library('sf')
     if (!require('sp')) install.packages('sp'); library('sp')
     if (!require('leaflet')) install.packages('leaflet'); library('leaflet')
+    if (!require('googlesheets4')) install.packages('googlesheets4'); library('googlesheets4')
+    if (!require('googlesheets4')) devtools::install_github("tidyverse/googlesheets4"); library('googlesheets4') # using dev version
+    
+
     #if (!require('geojsonio')) install.packages('geojsonio'); library('geojsonio')
     
     if (!require('lubridate')) install.packages('lubridate'); library('lubridate')
@@ -130,4 +134,23 @@ propagate_down_national <- function(long_data,
     return(rc)
 }
 
+#' writes data to google spreadsheet for website visualizations
+#' @param dat data to write to spreadsheet
+#' @param ss_id spreadsheet id (from google)
+#' @param sheet_title title of sheet
+#' @param propagate run propagate_down_national before posting
+write_to_gsheet <- function(dat,
+                            ss_id = "1SW6Q0x31tlLt-VroeVj21t-1z-byGT8hhMGBcjuL7U8",
+                            sheet_title="hit-covid-dashboard",
+                            propagate=TRUE
+                            ){
+    
+    if(propagate){
+        dat <- propagate_down_national(dat)
+    }
+    
+    cat("writing to google sheet \n")
+    googlesheets4::sheets_write(dat,ss = "1SW6Q0x31tlLt-VroeVj21t-1z-byGT8hhMGBcjuL7U8",sheet="latest")
+
+}
 
