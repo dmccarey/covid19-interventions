@@ -1,0 +1,161 @@
+---
+title: "Admin 1 Survey Data Report"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+## NEED TO SET THIS TO GET THIS FILE LOCATION ##
+knitr::opts_knit$set(root.dir = "~/Boston University/COVID_Interventions/covid19-interventions/hit-covid-timeline")
+```
+
+
+```{r read, include=FALSE}
+source("source/utils.R")
+source("source/data_report_functions.R")
+reload_source()
+interven_names <- read_csv("intervention_lookup.csv")
+long_data <- get_long_data(fresh_pull = FALSE, long_file_path = "generated_data/survey_data_long.csv", remove_names=TRUE)
+last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
+```
+
+
+```{r cleantable}
+
+## WANT TO RUN THE WHOLE MARKDOWN LIKE A FUNCTION INPUTS: national_input, country_input, admin_input ##
+
+national_input <- FALSE
+admin_input <- "USA.1_1"
+
+if(national_input == TRUE){
+  admin_tab_initial <- long_data %>% filter(country == country_input,
+                                    national_entry == "Yes")
+}else{
+  admin_tab_initial <- long_data %>% filter(adm1 == admin_input)
+}
+
+admin_tab <- admin_tab_initial   %>% 
+    left_join(interven_names, by = c("intervention_specific", "intervention")) %>%
+    select(record_id, data_entry_by, entry_time = geography_and_intro_timestamp,
+           national_entry, country_name, admin1_name, locality = adm_lowest,
+           intervention_clean, intervention_specific_clean,
+           date_of_update = t_original, status, subpopulation = pop,
+           required, enforcement, size, duration, details, date_flag) %>%
+            arrange(admin1_name) %>%
+  mutate(status_flag = status %in% c("open", "no", "no policy", "none", "unrestricted") &
+           date_of_update < as.Date("2020/04/15", origin = "1970/01/01"),
+         details = substr(details, 1, 100),
+         any_flag = date_flag | status_flag | status == "unknown",
+         status_simp = ifelse(status %in% c("all",
+                                              "closed",
+                                              "complete contact tracing",
+                                              "fully restricted",
+                                              "required",
+                                              "yes"), 1,
+                                ifelse(status %in% c("partial contact tracing",
+                                                     "partially closed",
+                                                     "partially restricted",
+                                                     "recommended",
+                                                     "some"), 2,
+                                       ifelse(status %in% c("open",
+                                                            "no",
+                                                            "no policy",
+                                                            "none",
+                                                            "unrestricted"), 3, status))),
+           status_simp = factor(status_simp, levels = c(1, 2, 3),
+                                labels = c("Strongly Implemented",
+                                           "Partially Implemented",
+                                           "Not Implemented")),
+         subpop_plot = ifelse(!is.na(subpopulation) &
+                                subpopulation == "entire population", 
+                                          "Entire Population",
+                       ifelse(!is.na(subpopulation), "Not Entire Population", "NA")))
+
+admin_name <- admin_tab$admin1_name[1]
+
+interven_list <- admin_tab %>%
+  filter(!duplicated(intervention_clean)) %>%
+  select(`Included Interventions` = intervention_clean)
+```
+
+
+# Data Summary Report for `r admin_name`
+
+#### As of `r last_updated_time` there have been `r nrow(admin_tab)` intervention updates reported for `r admin_name`. These entries were logged by `r unique(admin_tab$data_entry_by)[!is.na(unique(admin_tab$data_entry_by))]` These updates represent the following intervention sections:
+
+`r kable(interven_list)`
+
+
+***
+
+Please review the following updates for each intervention and confirm that the information is correct.
+
+#### To report any corrections to this data please use this form [LINK].
+
+In particular as shown in the following table and highlighted through the rest of the report:
+
+* There are `r sum(admin_tab$date_flag == TRUE)` entries where the date of the intervention update is after the date of entry. **Please confirm that these dates are correct.**
+    
+* There are `r sum(admin_tab$status_flag == TRUE)` entries where the invervention status indicates a relaxing of restrictions before mid April. **Please confirm that these statuses are correct.**
+
+* There are `r sum(admin_tab$status == "unknown")` entries where the intervention status is "unknown". **Please provide the correct status**.
+
+
+
+```{r flagdata}
+flag_data <- admin_tab %>%
+  filter(any_flag == TRUE) %>%
+  select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag, -any_flag, -status_simp, -subpop_plot) %>%
+  select_if(~sum(!is.na(.)) > 0)
+
+df <- datatable(flag_data,
+        class = "display nowrap compact", # style
+        filter = "top", # location of column filters,
+        options = list(
+          scrollX = TRUE, # allow user to scroll wide tables horizontally
+          pageLength = 30
+          )
+)
+df
+```
+
+
+***
+
+```{r datatable, include = FALSE}
+# You need this code to be able to print datatables within a loop
+DT::datatable(matrix())
+```
+
+
+```{r interven_df, results='asis', fig.height=3, fig.width=8}
+
+all_int <- interven_list %>% pull(`Included Interventions`)
+
+for(intervention in all_int){
+  cat(sprintf("\n\n## %s\n\n", intervention))
+  plotdf <- find_interven_info(admin_tab, intervention)
+  print(plotdf[[1]])
+  cat(knitr::knit_print(plotdf[[2]]))
+}
+```
+
+
+
+***
+
+```{r missing}
+interven_miss <- interven_names %>%
+  filter(!intervention_clean %in% admin_tab$intervention_clean) %>%
+  filter(!duplicated(intervention_clean)) %>%
+  select(`Missing Interventions` = intervention_clean)
+```
+
+#### There were no entries for the following interventions. **Please confirm that there have been no updates for these intervention sections.**
+
+`r kable(interven_miss)`
+
+
+
+
