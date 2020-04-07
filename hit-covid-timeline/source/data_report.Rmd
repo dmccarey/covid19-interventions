@@ -2,12 +2,16 @@
 title: "Admin 1 Survey Data Report"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
+params:
+  national_input: "FALSE"
+  admin_input: "USA.1_1"
+  country_input: "USA"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-## NEED TO SET THIS TO GET THIS FILE LOCATION ##
-knitr::opts_knit$set(root.dir = "~/Boston University/COVID_Interventions/covid19-interventions/hit-covid-timeline")
+knitr::opts_knit$set(root.dir="../")
+
 ```
 
 
@@ -22,11 +26,10 @@ last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 
 
 ```{r cleantable}
-
 ## WANT TO RUN THE WHOLE MARKDOWN LIKE A FUNCTION INPUTS: national_input, country_input, admin_input ##
-
-national_input <- FALSE
-admin_input <- "USA.1_1"
+national_input <- params$national_input
+admin_input <- params$admin_input
+country_input <- params$country_input
 
 if(national_input == TRUE){
   admin_tab_initial <- long_data %>% filter(country == country_input,
@@ -65,7 +68,9 @@ admin_tab <- admin_tab_initial %>%
                        ifelse(!is.na(subpopulation), "Not Entire Population", "NA")),
           row_id = 1:n())
 
-admin_name <- admin_tab$admin1_name[1]
+admin_name <- ifelse(is.na(admin_tab$admin1_name[1]),
+                     admin_tab$country_name[1],
+                     admin_tab$admin1_name[1])
 
 interven_list <- admin_tab %>%
   filter(!duplicated(intervention_clean)) %>%
