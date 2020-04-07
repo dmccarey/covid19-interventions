@@ -185,9 +185,19 @@ server <- function(input, output,session) {
         updateSelectInput(session,"admin_unit", choices = choices) 
     })
     
+    # spreadsheet of data to scroll through
     output$overview_tab <- renderDT(
         interven_df_plot   %>% 
-            filter(country == input$country_select) %>%
+            #include only the admin1 level area selected
+            filter(admin1 %in% input$admin_unit) %>%
+            #include national interventions if selected
+            rbind({
+                if(input$include_national){
+                    filter(interven_df_plot,
+                           country == input$country_select &
+                               is.na(admin1))
+                } else data.frame() #empty data.frame
+            }) %>%
             select(-national_entry, -status_simp, -required_new,
                    -country, -admin1, intervention_f) %>%
             arrange(admin1_name),
@@ -198,6 +208,22 @@ server <- function(input, output,session) {
         )
         
     )
+    
+    
+    #old overview tab april 6, 2020
+    # output$overview_tab <- renderDT(
+    #     interven_df_plot   %>% 
+    #         filter(country == input$country_select) %>%
+    #         select(-national_entry, -status_simp, -required_new,
+    #                -country, -admin1, intervention_f) %>%
+    #         arrange(admin1_name),
+    #     class = "display nowrap compact", # style
+    #     filter = "top", # location of column filters,
+    #     options = list(  # options
+    #         scrollX = TRUE # allow user to scroll wide tables horizontally
+    #     )
+    #     
+    # )
     
     ## make timeline plot
     output$timeline <- renderGirafe({
