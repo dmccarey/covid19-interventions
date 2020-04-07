@@ -41,9 +41,15 @@ interven_df_plot <- long_data   %>%
                                                             "none",
                                                             "unrestricted"), 3, status))),
            status_simp = factor(status_simp, levels = c(1, 2, 3),
-                                labels = c("closed/restricted/all/yes",
-                                           "partially closed/partially restricted/\nrecommended/some",
-                                           "open/no/no policy/none/unrestricted")))
+                                labels = c("Strongly Implemented",
+                                           "Partially Implemented",
+                                           "Not Implemented")),
+           # Making new requirement metric
+           required_new = ifelse(intervention_clean %in% c("Limiting size of gatherings",
+                                                       "Symptom screening when entering by land")
+                             & is.na(required), "unknown",
+                             ifelse(is.na(required), "required", required)),
+           intervention_f = factor(intervention_clean))
 
 
 # Define UI for application that draws a histogram
@@ -182,7 +188,8 @@ server <- function(input, output,session) {
     output$overview_tab <- renderDT(
         interven_df_plot   %>% 
             filter(country == input$country_select) %>%
-            select(-national_entry, -status_simp, -country, -admin1) %>%
+            select(-national_entry, -status_simp, -required_new,
+                   -country, -admin1, intervention_f) %>%
             arrange(admin1_name),
         class = "display nowrap compact", # style
         filter = "top", # location of column filters,
@@ -201,7 +208,7 @@ server <- function(input, output,session) {
             # figure out which country
             # get national level data and create fake obs for this admin unit
             cntry <- admin_lookup %>% dplyr::filter(GID_1==input$admin_unit) %>% select(admin0) %>% unlist %>% first
-
+            
             national_ints <- tmp %>% dplyr::filter(national_entry=="Yes" & country==cntry) %>% 
                 mutate(admin1 = input$admin_unit)
             
@@ -212,25 +219,46 @@ server <- function(input, output,session) {
         
         ## creating tool tips for hover
         ## can make this nicer later
-        tmp <- tmp %>% mutate(tooltip=paste0("record id: ",record_id,"\n",
-                                             "date: ",date_of_update,"\n",
-                                             "intervention: ",intervention_clean,"\n",
-                                             "status: ",status,"\n",
-                                             "subpopulation: ",subpopulation,"\n",
-                                             "required:",required,"\n",
-                                             "enforcement:",enforcement))
-            
-        gg <- ggplot(data = tmp %>% filter(admin1 %in% input$admin_unit),
-               aes(x = date_of_update, y = intervention_clean,
-                   shape = status_simp, 
-                   color = national_entry)) +
-                geom_point_interactive(aes(tooltip = tooltip,
-                                           data_id = record_id),size=3)+
-            #geom_point(size = 3) + 
-            xlab("Date of policy change") + 
-            ylab("") + theme(legend.position="bottom") + theme_bw() + labs(color="National Policy?",shape="Policy Status")
+        tmp <- tmp %>%
+            mutate(tooltip=paste0("record id: ",record_id,"\n",
+                                  "date: ",date_of_update,"\n",
+                                  "intervention: ",intervention_clean,"\n",
+                                  "status: ",status,"\n",
+                                  "subpopulation: ",subpopulation,"\n",
+                                  "required: ",required,"\n",
+                                  "enforcement: ",enforcement,"\n",
+                                  "size: ", size)) %>%
+            filter(admin1 %in% input$admin_unit) %>%
+            mutate(subpopulation = ifelse(subpopulation == "entire population", 
+                                          "Entire Population",
+                                          ifelse(!is.na(subpopulation), "Not Entire Population",
+                                                 NA)))
         
-            girafe(ggobj = gg,width_svg = 12)
+        gg <- ggplot(data = tmp,
+                     aes(x = date_of_update, y = intervention_f,
+                         color = status_simp, shape = national_entry,
+                         alpha = subpopulation)) +
+            scale_y_discrete(drop=FALSE) +
+            scale_alpha_manual(values=c('Entire Population' = 1, 'Not Entire Population' = .4)) +
+            scale_color_manual(values=c('Strongly Implemented'="red",'Partially Implemented'=
+                                            "yellow", 'Not Implemented'= "green")) +
+            geom_point_interactive(aes(tooltip = tooltip, data_id = record_id), size = 8) +
+            theme_bw() +
+            theme(legend.position="bottom",
+                  legend.box = "vertical") + 
+            labs(y = "",
+                 x = "Date of Policy Change",
+                 color="Policy Status",
+                 shape="National Policy?",
+                 alpha="Subpopulation") +
+            guides(color = guide_legend(order = 1),
+                   alpha = guide_legend(order = 2),
+                   shape = guide_legend(order = 3)) +
+        theme(text = element_text(size=20))#, axis.text.x = element_text(angle=90)) +
+        #scale_x_discrete(position = "top") +
+        #scale_y_reverse(labels = function(x) as_date(x))
+        
+        girafe(ggobj = gg, width_svg = 20, height_svg =20)
 
     })
     
