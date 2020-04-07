@@ -5,7 +5,7 @@ find_interven_info <- function(admin_tab, intervention){
   one_int <- admin_tab %>%
     filter(intervention_clean == intervention) %>%
     arrange(intervention_specific_clean) %>%
-    select(-entry_time, -country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag) %>%
+    select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag) %>%
     # Removing columns that are completely missing
     select_if(~sum(!is.na(.)) > 0)
     
@@ -43,11 +43,11 @@ find_interven_info <- function(admin_tab, intervention){
              color="Policy Status")
     }
   
-  hideCol <- which(names(one_int) == "any_flag")
+  print_tab <- one_int %>% select(-status_simp, -subpop_plot, -duplicate_flag, -row_id)
+  hideCol <- which(names(print_tab) == "any_flag")
   
-  df <- datatable(one_int %>% select(-status_simp, -subpop_plot),
+  df <- datatable(print_tab,
                   class = "display nowrap compact", # style
-                  filter = "top", # location of column filters,
                   options = list(
                     scrollX = TRUE, # allow user to scroll wide tables horizontally
                     pageLength = 10,

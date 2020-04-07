@@ -35,42 +35,35 @@ if(national_input == TRUE){
   admin_tab_initial <- long_data %>% filter(adm1 == admin_input)
 }
 
-admin_tab <- admin_tab_initial   %>% 
+admin_tab <- admin_tab_initial %>% 
+  arrange(record_id) %>%
     left_join(interven_names, by = c("intervention_specific", "intervention")) %>%
-    select(record_id, data_entry_by, entry_time = geography_and_intro_timestamp,
+    select(record_id, data_entry_by, entry_date = geography_and_intro_timestamp,
            national_entry, country_name, admin1_name, locality = adm_lowest,
            intervention_clean, intervention_specific_clean,
            date_of_update = t_original, status, subpopulation = pop,
-           required, enforcement, size, duration, details, date_flag) %>%
-            arrange(admin1_name) %>%
-  mutate(status_flag = status %in% c("open", "no", "no policy", "none", "unrestricted") &
-           date_of_update < as.Date("2020/04/15", origin = "1970/01/01"),
+           required, enforcement, size, duration, testing_population = test_pop,
+           details, date_flag) %>%
+  mutate(entry_date = as.Date(entry_date),
+         status_flag = status %in% c("open", "no", "no policy", "none", "unrestricted") &
+         date_of_update < as.Date("2020/04/15", origin = "1970/01/01"),
          details = substr(details, 1, 100),
-         any_flag = date_flag | status_flag | status == "unknown",
-         status_simp = ifelse(status %in% c("all",
-                                              "closed",
-                                              "complete contact tracing",
-                                              "fully restricted",
-                                              "required",
-                                              "yes"), 1,
+         status_simp = ifelse(status %in% c("all", "closed", "complete contact tracing",
+                                              "fully restricted", "required", "yes"), 1,
                                 ifelse(status %in% c("partial contact tracing",
-                                                     "partially closed",
-                                                     "partially restricted",
-                                                     "recommended",
-                                                     "some"), 2,
-                                       ifelse(status %in% c("open",
-                                                            "no",
-                                                            "no policy",
-                                                            "none",
-                                                            "unrestricted"), 3, status))),
+                                                     "partially closed", "partially restricted",
+                                                     "recommended", "some"), 2,
+                                       ifelse(status %in% c("open", "no", "no policy",
+                                                            "none", "unrestricted"), 3, status))),
            status_simp = factor(status_simp, levels = c(1, 2, 3),
                                 labels = c("Strongly Implemented",
                                            "Partially Implemented",
                                            "Not Implemented")),
-         subpop_plot = ifelse(!is.na(subpopulation) &
+           subpop_plot = ifelse(!is.na(subpopulation) &
                                 subpopulation == "entire population", 
                                           "Entire Population",
-                       ifelse(!is.na(subpopulation), "Not Entire Population", "NA")))
+                       ifelse(!is.na(subpopulation), "Not Entire Population", "NA")),
+          row_id = 1:n())
 
 admin_name <- admin_tab$admin1_name[1]
 
@@ -78,6 +71,28 @@ interven_list <- admin_tab %>%
   filter(!duplicated(intervention_clean)) %>%
   select(`Included Interventions` = intervention_clean)
 ```
+
+```{r duplicates}
+
+# Finding potential duplicates
+dup_cols <- c("intervention_specific_clean", "status", "subpopulation", "required")
+
+dup_rows <- admin_tab %>%
+  group_by(intervention_specific_clean, status, subpopulation, required) %>%
+  mutate(time_diff = date_of_update - lag(date_of_update)) %>% 
+  filter(time_diff < 3) %>%
+  select(intervention_specific_clean, status, subpopulation, required)
+
+dup_data <- inner_join(admin_tab, dup_rows, by = dup_cols) %>%
+  mutate(duplicate_flag = TRUE) %>%
+  select(row_id, duplicate_flag)
+
+admin_tab <- admin_tab %>%
+  full_join(dup_data, by = "row_id") %>%
+  mutate(any_flag = date_flag | status_flag | duplicate_flag | status == "unknown") %>%
+  replace_na(list(any_flag = FALSE, duplicate_flag = FALSE))
+```
+
 
 
 # Data Summary Report for `r admin_name`
@@ -99,19 +114,27 @@ In particular as shown in the following table and highlighted through the rest o
     
 * There are `r sum(admin_tab$status_flag == TRUE)` entries where the invervention status indicates a relaxing of restrictions before mid April. **Please confirm that these statuses are correct.**
 
-* There are `r sum(admin_tab$status == "unknown")` entries where the intervention status is "unknown". **Please provide the correct status**.
+* There are `r sum(admin_tab$status == "unknown")` entries where the intervention status is "unknown". **Please provide the correct status.**
+
+* There are `r sum(admin_tab$duplicate_flag == TRUE)` entries that may be duplicates. **Please confirm that these are unique updates.**
 
 
-
+### Table of Entries with Potential Errors (highlighted in following tables)
 ```{r flagdata}
 flag_data <- admin_tab %>%
   filter(any_flag == TRUE) %>%
-  select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag, -any_flag, -status_simp, -subpop_plot) %>%
-  select_if(~sum(!is.na(.)) > 0)
+  mutate(to_check = ifelse(date_flag == TRUE, "Check Date",
+                    ifelse(status_flag == TRUE | status == "unknown", "Check Status",
+                           "Check Duplicate"))) %>%
+  select(record_id, data_entry_by, entry_date, to_check, locality, intervention_specific_clean,
+         date_of_update, status, subpopulation, required, size, enforcement,
+         testing_population, duration, details) %>%
+  select_if(~sum(!is.na(.)) > 0) %>%
+  arrange(intervention_specific_clean)
 
 df <- datatable(flag_data,
         class = "display nowrap compact", # style
-        filter = "top", # location of column filters,
+        rownames = FALSE,
         options = list(
           scrollX = TRUE, # allow user to scroll wide tables horizontally
           pageLength = 30
