@@ -111,7 +111,7 @@ admin_tab <- admin_tab %>%
 
 Please review the following updates for each intervention and confirm that the information is correct.
 
-#### To report any corrections to this data please use this form [LINK].
+#### To report any corrections to this data please use this [form](https://forms.gle/S4JEgrxjy4YKPBMo8).
 
 In particular as shown in the following table and highlighted through the rest of the report:
 
