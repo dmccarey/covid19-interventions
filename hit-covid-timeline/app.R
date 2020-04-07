@@ -18,10 +18,10 @@ last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 interven_df_plot <- long_data   %>% 
     filter(complete == "Complete") %>% 
     #Adding cleaned intervention names
-    left_join(interven_names, by = "intervention_specific") %>%
+    left_join(interven_names, by = c("intervention_specific", "intervention")) %>%
     select(record_id, entry_time = geography_and_intro_timestamp,
            national_entry, country, country_name, admin1 = adm1, admin1_name,
-           locality = adm_lowest, intervention_clean,
+           locality = adm_lowest, intervention_specific_clean,
            date_of_update = t, status, subpopulation = pop,
            required, enforcement, size, duration, test_pop, details) %>%
     mutate(status_simp = ifelse(status %in% c("all",
@@ -45,11 +45,11 @@ interven_df_plot <- long_data   %>%
                                            "Partially Implemented",
                                            "Not Implemented")),
            # Making new requirement metric
-           required_new = ifelse(intervention_clean %in% c("Limiting size of gatherings",
+           required_new = ifelse(intervention_specific_clean %in% c("Limiting size of gatherings",
                                                        "Symptom screening when entering by land")
                              & is.na(required), "unknown",
                              ifelse(is.na(required), "required", required)),
-           intervention_f = factor(intervention_clean))
+           intervention_f = factor(intervention_specific_clean))
 
 
 # Define UI for application that draws a histogram
@@ -248,7 +248,7 @@ server <- function(input, output,session) {
         tmp <- tmp %>%
             mutate(tooltip=paste0("record id: ",record_id,"\n",
                                   "date: ",date_of_update,"\n",
-                                  "intervention: ",intervention_clean,"\n",
+                                  "intervention: ",intervention_specific_clean,"\n",
                                   "status: ",status,"\n",
                                   "subpopulation: ",subpopulation,"\n",
                                   "required: ",required,"\n",
