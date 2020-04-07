@@ -498,7 +498,9 @@ create_long <- function(data,
     arrange(record_id)
   
   if(remove_names){
-    dataL_clean <- dataL_clean %>% mutate(data_entry_by = paste0(substr(first_name,1,1),".",substr(last_name,1,1),".")) %>% 
+    dataL_clean <- dataL_clean %>% mutate(data_entry_by = paste0(toupper(substr(first_name,1,1)), ".",
+                                                                 toupper(substr(last_name,1,1)),".")) %>% 
+      replace_with_na(list(data_entry_by = "NA.NA.")) %>%
       select(-first_name, -last_name, -email)
   }
   
