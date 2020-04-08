@@ -17,8 +17,8 @@ find_interven_info <- function(admin_tab, intervention){
       p <- ggplot(data = one_int, aes(x = date_of_update, y = intervention_specific_clean,
                                       color = status_simp, alpha = subpop_plot)) +
         scale_alpha_manual(values=c('Entire Population' = 1, 'Not Entire Population' = .4)) +
-        scale_color_manual(values=c('Strongly Implemented'="red",'Partially Implemented'=
-                                      "yellow", 'Not Implemented'= "green")) +
+        scale_color_manual(values=c('Strongly Implemented'="red3",'Partially Implemented'=
+                                      "gold1", 'Not Implemented'= "green4")) +
         scale_x_date(limits = c(min(long_data$t_original, na.rm = TRUE), today() + 2)) +
         geom_point(size = 3) +
         theme_bw() +

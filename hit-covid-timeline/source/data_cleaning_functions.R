@@ -479,7 +479,7 @@ create_long <- function(data,
                                     required))),
            # Removing non-unicode characters
            details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
-           details = iconv(details, from = "latin1", to = "UTF-8", sub = ""),
+           details = iconv(details, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
            adm_lowest = iconv(adm_lowest, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
            # cleaning up country names a little bit 
            country_name = str_remove_all(country_name,"[^[:alnum:] ]")) %>%

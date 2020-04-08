@@ -215,8 +215,8 @@ server <- function(input, output,session) {
                          alpha = subpopulation)) +
             scale_y_discrete(drop=FALSE) +
             scale_alpha_manual(values=c('Entire Population' = 1, 'Not Entire Population' = .4)) +
-            scale_color_manual(values=c('Strongly Implemented'="red",'Partially Implemented'=
-                                            "yellow", 'Not Implemented'= "green")) +
+            scale_color_manual(values=c('Strongly Implemented'="red3",'Partially Implemented'=
+                                            "gold1", 'Not Implemented'= "green4")) +
             geom_point_interactive(aes(tooltip = tooltip, data_id = record_id), size = 8) +
             theme_bw() +
             theme(legend.position="bottom",

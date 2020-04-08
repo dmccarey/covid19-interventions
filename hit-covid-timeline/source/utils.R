@@ -85,7 +85,7 @@ get_long_data <- function(fresh_pull=FALSE,
         dataL_clean <- create_long(data, error_window = 2,...)
         
         cat(sprintf("Saving long file at %s \n",long_file_path))
-        write.csv(dataL_clean, long_file_path)
+        write.csv(dataL_clean, long_file_path, row.names = FALSE)
     } 
     
     rc <- tryCatch({

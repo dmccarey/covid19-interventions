@@ -27,12 +27,9 @@ last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 
 ```{r cleantable}
 
-# national_input <- params$national_input
-# admin_input <- params$admin_input
-# country_input <- params$country_input
-
-national_input <- FALSE
-admin_input <- "ROU.25_1"
+national_input <- params$national_input
+admin_input <- params$admin_input
+country_input <- params$country_input
 
 if(national_input == TRUE){
   admin_tab_initial <- long_data %>% filter(country == country_input,
