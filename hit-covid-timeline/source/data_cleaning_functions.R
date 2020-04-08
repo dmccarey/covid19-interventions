@@ -423,7 +423,7 @@ other_intervention_long <- function(data, idCols){
   
   other_dfL <- combine_interven_comp(other_df, idCols, specific_names, interven_name,
                                      suffixes = c("timestamp", "complete"))
-  other_dfL2 <- interven_dfL %>%
+  other_dfL2 <- other_dfL %>%
     mutate(record_id = as.numeric(record_id),
            # Removing non-unicode characters
            details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
