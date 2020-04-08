@@ -7,3 +7,4 @@ hit-covid-timeline/generated_data/survey_data_long.csv
 hit-covid-timeline/generated_data/unknown.xlsx
 hit-covid-timeline/generated_data/data_dictionary_survey_long.xlsx
 hit-covid-timeline/audit_reports/*
+hit-covid-timeline/generated_data/other_interventions.csv

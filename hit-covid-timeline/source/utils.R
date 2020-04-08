@@ -72,6 +72,7 @@ pull_data <- function(api_path = "private/api_token.txt",
 #' csv file
 get_long_data <- function(fresh_pull=FALSE,
                           long_file_path="generated_data/survey_data_long.csv",
+                          other_file_path="generated_data/other_interventions.csv",
                           ...){
     
     if(fresh_pull){
@@ -82,10 +83,13 @@ get_long_data <- function(fresh_pull=FALSE,
         data <- pull_data()
         
         # cleaning
-        dataL_clean <- create_long(data, error_window = 2,...)
+        data_clean_list <- create_long(data, error_window = 2,...)
         
         cat(sprintf("Saving long file at %s \n",long_file_path))
-        write.csv(dataL_clean, long_file_path, row.names = FALSE)
+        write.csv(data_clean_list[[1]], long_file_path, row.names = FALSE)
+        
+        cat(sprintf("Saving other intervention file at %s \n",other_file_path))
+        write.csv(data_clean_list[[2]], other_file_path, row.names = FALSE)
     } 
     
     rc <- tryCatch({

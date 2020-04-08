@@ -33,7 +33,10 @@ rename_cols <- function(data){
            enforcement_deployed_complete = military_and_police_deployment_complete,
            iso_details = isolation_desc,
            quar_iso_timestamp = quarantine_and_homeisolation_timestamp,
-           quar_iso_complete = quarantine_and_homeisolation_complete)
+           quar_iso_complete = quarantine_and_homeisolation_complete,
+           other_intervention_up = updated_domains___others_up,
+           other_intervention_complete = other_interventions_complete,
+           other_intervention_timestamp = other_interventions_timestamp)
   
   names(data2) <- gsub("updated_domains___", "", names(data2))
   names(data2) <- gsub("tomatic_individuals", "", names(data2))
@@ -185,10 +188,12 @@ combine_interven_simp <- function(data, idCols, interven_names_simp){
 #' interventions (should be prefix of the column names)
 #' @param interven_name string representing the name of the complex intervention
 #' (should be prefix of update column)
+#' @param suffixes vector of suffixes for the intervention group (same for all specific interventions)
 #' @return a long dataframe with just the info about the intervention denoted by interven_name
 #' with the columns renamed removing the intervention pre-fix and combining all specific
 #' interventions represented by the specific_names.
-combine_interven_comp <- function(interven_df, idCols, specific_names, interven_name){
+combine_interven_comp <- function(interven_df, idCols, specific_names, interven_name,
+                                  suffixes = c("timestamp", "source", "url", "complete")){
   
   # Creating inital long version with specific interventions on different rows
   interven_df2 <- interven_df %>%
@@ -198,7 +203,6 @@ combine_interven_comp <- function(interven_df, idCols, specific_names, interven_
     mutate(up_specific = ifelse(up_specific == "", "No Update", "Update"),
            intervention = interven_name)
   
-  suffixes <- c("timestamp", "source", "url", "complete")
   interven_idCols <- c("intervention", "intervention_specific",
                        paste0(interven_name, "_up"), "up_specific",
                        paste(interven_name, suffixes, sep = "_"))
@@ -397,6 +401,44 @@ combine_interven <- function(data, idCols, interven_names_simp){
 }
 
 
+
+#' Function to create cleaned version of other intervention data; runs combine_interven_comp()
+#' @param data wide verison of survey data
+#' @param idCols vector of column names that uniquely identify an entry
+#' @return a long dataframe for the other intervention data (did not fit categories specified)
+other_intervention_long <- function(data, idCols){
+  interven_name <- "other_intervention"
+  other_df <- data[data$other_intervention_complete == "Complete",
+                   c(idCols, names(data)[grepl(interven_name, names(data))])] %>%
+    rename(other_intervention_1_details = other_intervention_details,
+           other_intervention_1_event = other_intervention_event,
+           other_intervention_1_t = other_intervention_t,
+           other_intervention_1_source = other_intervention_source,
+           other_intervention_1_url = other_intervention_url) %>%
+    mutate(other_intervention_1 = ifelse(other_intervention_up != "", "Update", "No Update"),
+           other_intervention_2 = ifelse(other_intervention_add == "Yes", "Update", "No Update"),
+           other_intervention_3 = ifelse(other_intervention_add_2 == "Yes", "Update", "No Update")) %>%
+    replace_na(list(other_intervention_2_up = "No Update",
+                    other_intervention_3_up = "No Update"))
+  
+  specific_names <- c("other_intervention_1", "other_intervention_2", "other_intervention_3")
+  
+  other_dfL <- combine_interven_comp(other_df, idCols, specific_names, interven_name,
+                                     suffixes = c("timestamp", "complete"))
+  other_dfL2 <- interven_dfL %>%
+    mutate(record_id = as.numeric(record_id),
+           # Removing non-unicode characters
+           details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
+           details = iconv(details, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
+           adm_lowest = iconv(adm_lowest, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
+           # cleaning up country names a little bit 
+           country_name = str_remove_all(country_name,"[^[:alnum:] ]")) %>%
+    replace_na(list(national_entry = "No")) %>% 
+    filter(!is.na(details)) %>%
+    select(-no_updates, -up, -up_specific, -geography_and_intro_complete, -intervention) 
+}
+
+
 #### Creating Cleaned Long Version of Dataset ####
 
 #' Function to create cleaned long version of the dataset
@@ -407,8 +449,10 @@ combine_interven <- function(data, idCols, interven_names_simp){
 #' @param error_window number days ahead of the date of entry is the intervention date
 #' and represents a calendar entry error so should be recoded to the month before (default is 2)
 #' @param remove_names flag for whether we remove data enty people's names and emails
-#' @return a long version of the survey data with only the rows that represent updates to the
-#' interventions and removing names and emails for public use
+#' @return a list with two dataframes:
+#'     1. long version of the survey data with only the rows that represent updates to the
+#'        interventions and removing names and emails for public use
+#'     2. long version of the data about other interventions (did not fit categories specified)
 create_long <- function(data, 
                         idCols=c("record_id","geography_and_intro_timestamp",
                                  "email", "first_name", "last_name", "country", "country_name",
@@ -457,9 +501,9 @@ create_long <- function(data,
   # Creating long version of the survey data
   dataL <- combine_interven(some_updates, idCols, interven_names_simp)
   
-  # #Subsetting to rows with no updates at all
-  # #Note right now this is not included in the dataset becaue probably not of interest
-  # #But can be added in the future if desired
+  # # Subsetting to rows with no updates at all
+  # # Note right now this is not included in the dataset becaue probably not of interest
+  # # But can be added in the future if desired
   # no_updates <- data4[data4$no_updates == TRUE, idCols]
   
   
@@ -499,16 +543,28 @@ create_long <- function(data,
     # Arranging by record_id
     arrange(record_id)
   
+  # Correcting dates (original dates in column t_original)
+  dataL_clean2 <- clean_dates(dataL_clean, error_window = error_window)
+  
+  ## Creating dataset of other interventions ##
+  otherL_clean <- other_intervention_long(some_updates, idCols)
+  otherL_clean2 <- clean_dates(otherL_clean, error_window = error_window)
+  
+  
+  
   if(remove_names){
-    dataL_clean <- dataL_clean %>% mutate(data_entry_by = paste0(toupper(substr(first_name,1,1)), ".",
+    dataL_clean2 <- dataL_clean2 %>% mutate(data_entry_by = paste0(toupper(substr(first_name,1,1)), ".",
                                                                  toupper(substr(last_name,1,1)),".")) %>% 
+      replace_with_na(list(data_entry_by = "NA.NA.")) %>%
+      select(-first_name, -last_name, -email)
+    
+    otherL_clean2 <- otherL_clean2 %>% mutate(data_entry_by = paste0(toupper(substr(first_name,1,1)), ".",
+                                                                   toupper(substr(last_name,1,1)),".")) %>% 
       replace_with_na(list(data_entry_by = "NA.NA.")) %>%
       select(-first_name, -last_name, -email)
   }
   
-  # Correcting dates (original dates in column t_original)
-  dataL_clean2 <- clean_dates(dataL_clean, error_window = error_window)
-  
-  return(dataL_clean2)
+  return(list(dataL_clean2, otherL_clean2))
 }
+
 
