@@ -4,7 +4,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 params:
   national_input: "FALSE"
-  admin_input: "USA.39_1"
+  admin_input: "USA.13_1"
   country_input: "USA"
 ---
 
@@ -20,7 +20,7 @@ source("source/utils.R")
 source("source/data_report_functions.R")
 reload_source()
 interven_names <- read_csv("intervention_lookup.csv")
-long_data <- get_long_data(fresh_pull = FALSE, long_file_path = "generated_data/survey_data_long.csv", remove_names=TRUE)
+long_data <- get_long_data(fresh_pull = TRUE, long_file_path = "generated_data/survey_data_long.csv", remove_names=TRUE)
 last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
 ```
 
@@ -78,6 +78,12 @@ admin_name <- ifelse(is.na(admin_tab$admin1_name[1]),
 interven_list <- admin_tab %>%
   filter(!duplicated(intervention_clean)) %>%
   select(`Included Interventions` = intervention_clean)
+
+entry_name <- unique(admin_tab$data_entry_by)[!is.na(unique(admin_tab$data_entry_by))]
+if(length(entry_name) == 0){
+  entry_name <- "(no name provided)"
+}
+
 ```
 
 ```{r duplicates}
@@ -108,7 +114,7 @@ admin_tab <- admin_tab %>%
 
 # Data Summary Report for `r admin_name`
 
-#### As of `r last_updated_time` there have been `r nrow(admin_tab)` intervention updates reported for `r admin_name`. These entries were logged by `r unique(admin_tab$data_entry_by)[!is.na(unique(admin_tab$data_entry_by))]` These updates represent the following intervention sections:
+#### As of `r last_updated_time` there have been `r nrow(admin_tab)` intervention updates reported for `r admin_name`. These entries were logged by `r entry_name`. These updates represent the following intervention sections:
 
 `r kable(interven_list)`
 
