@@ -428,8 +428,9 @@ create_long <- function(data,
   # Reading in the country/admin1 lookup table and subsetting to just admin1 info
   admin_lookup <- read_csv("geo_lookup.csv")
   admin_lookup2 <- admin_lookup %>% 
-                   select(adm1 = GID_1, admin1_name = NAME_1) %>%
-                   filter(!is.na(adm1))
+    select(adm1 = GID_1, admin1_name = NAME_1) %>%
+    filter(!is.na(adm1)) %>%
+    mutate(admin1_name = iconv(admin1_name, "UTF-8", "ASCII//TRANSLIT"))
   
   # Subsetting to rows with completed geography and admin1 (valid entries)
   data2 <- data  %>%
@@ -478,7 +479,8 @@ create_long <- function(data,
                                     required))),
            # Removing non-unicode characters
            details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
-           details = iconv(details, from = 'latin1', to = 'UTF-8', sub = ""),
+           details = iconv(details, from = "latin1", to = "UTF-8", sub = ""),
+           adm_lowest = iconv(adm_lowest, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
            # cleaning up country names a little bit 
            country_name = str_remove_all(country_name,"[^[:alnum:] ]")) %>%
     replace_na(list(national_entry = "No")) %>%
