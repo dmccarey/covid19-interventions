@@ -1,4 +1,5 @@
 ## generate all reports
+sep_country_folders <- FALSE
 
 ## load data to see what admin units have data
 source("source/utils.R")
@@ -25,13 +26,19 @@ for (i in 1:nrow(unique_locs)){
   
   tryCatch({
     
-    cntry_folder <- paste0(out_dir,unique_locs$country[i])
     
-    if(!dir.exists(cntry_folder)){
-      dir.create(cntry_folder)
+    if(sep_country_folders){
+      cntry_folder <- paste0(out_dir,unique_locs$country[i])
+      
+      if(!dir.exists(cntry_folder)){
+        dir.create(cntry_folder)
+      }
+
+            out_file_name <- paste0(cntry_folder,"/",paste(unique_locs[i,],collapse="-"),"_",date,".html")
+      
+    } else {
+            out_file_name <- paste0(out_dir,paste(unique_locs[i,],collapse="-"),"_",date,".html")
     }
-    
-    out_file_name <- paste0(cntry_folder,"/",paste(unique_locs[i,],collapse="-"),"_",date,".html")
     tmp_params = list(national_input=ifelse(is.na(unique_locs[i,2]),TRUE,FALSE),
                       country_input =ifelse(is.na(unique_locs[i,2]),unique_locs[i,1],""),
                       admin_input = ifelse(is.na(unique_locs[i,2]),"",unique_locs[i,2]))
