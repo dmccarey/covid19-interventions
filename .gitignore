@@ -1,4 +1,3 @@
-
 private/api_token.txt
 private/url.txt
 .Rhistory
@@ -7,4 +6,4 @@ hit-covid-timeline/private/url.txt
 hit-covid-timeline/generated_data/survey_data_long.csv
 hit-covid-timeline/generated_data/unknown.xlsx
 hit-covid-timeline/generated_data/data_dictionary_survey_long.xlsx
-hit-covid-timeline/data_report.html
+hit-covid-timeline/audit_reports/*

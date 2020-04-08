@@ -5,9 +5,12 @@ find_interven_info <- function(admin_tab, intervention){
   one_int <- admin_tab %>%
     filter(intervention_clean == intervention) %>%
     arrange(intervention_specific_clean) %>%
-    select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag) %>%
-    # Removing columns that are completely missing
-    select_if(~sum(!is.na(.)) > 0)
+    select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag)
+    
+    # Removing empty columns except status and date_of_update
+    keepCols <- unique(c(one_int %>% select_if(~ !any(is.na(.))) %>% names(),
+                         "status", "date_of_update"))
+    one_int <- one_int[, keepCols]
     
     
     if("subpopulation" %in% names(one_int)){
@@ -16,7 +19,7 @@ find_interven_info <- function(admin_tab, intervention){
         scale_alpha_manual(values=c('Entire Population' = 1, 'Not Entire Population' = .4)) +
         scale_color_manual(values=c('Strongly Implemented'="red",'Partially Implemented'=
                                       "yellow", 'Not Implemented'= "green")) +
-        scale_x_date(limits = c(min(long_data$t_original, na.rm = TRUE), today())) +
+        scale_x_date(limits = c(min(long_data$t_original, na.rm = TRUE), today() + 2)) +
         geom_point(size = 3) +
         theme_bw() +
         theme(legend.position="bottom",
