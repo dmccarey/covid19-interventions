@@ -4,12 +4,12 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 params:
   national_input: "FALSE"
-  admin_input: "USA.1_1"
+  admin_input: "USA.39_1"
   country_input: "USA"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir="../")
 
 ```
@@ -50,7 +50,7 @@ admin_tab <- admin_tab_initial %>%
   mutate(entry_date = as.Date(entry_date),
          status_flag = status %in% c("open", "no", "no policy", "none", "unrestricted") &
            date_of_update < as.Date("2020/04/15", origin = "1970/01/01"),
-         #details = substr(details, 1, 150),
+         details = substr(details, 1, 150),
          status_simp = ifelse(status %in% c("all", "closed", "complete contact tracing",
                                             "fully restricted", "required", "yes"),
                               "Strongly Implemented",
@@ -88,14 +88,14 @@ dup_cols <- c("intervention_specific_clean", "status", "subpopulation", "require
 dup_rows <- admin_tab %>%
   group_by(intervention_specific_clean, status, subpopulation, required) %>%
   mutate(time_diff = date_of_update - lag(date_of_update)) %>%
-  arrange(intervention_specific_clean, status, subpopulation, required) %>%
+  arrange(intervention_specific_clean, status, subpopulation, required, date_of_update) %>%
   ungroup()
 
 # Index of rows that are within 2 days of the previous row and that previous row
-row_index <- unique(c(which(dup_rows$time_diff < 3), which(dup_rows$time_diff < 3) - 1))
+row_index <- unique(c(which(abs(dup_rows$time_diff) < 3), which(abs(dup_rows$time_diff) < 3) - 1))
 
 dup_rows <- dup_rows[row_index, ] %>%
-  mutate(duplicate_flag = TRUE) %>%
+  mutate(duplicate_flag = TRUE) %>% 
   select(row_id, duplicate_flag)
 
 admin_tab <- admin_tab %>%
@@ -117,7 +117,7 @@ admin_tab <- admin_tab %>%
 
 Please review the following updates for each intervention and confirm that the information is correct.
 
-#### To report any corrections to this data please use this [form](https://forms.gle/S4JEgrxjy4YKPBMo8).
+#### To report any corrections that have not already been logged on GitHub please use this [form](https://forms.gle/S4JEgrxjy4YKPBMo8).
 
 In particular as shown in the following table and highlighted through the rest of the report:
 
@@ -130,8 +130,7 @@ In particular as shown in the following table and highlighted through the rest o
 * There are `r sum(admin_tab$duplicate_flag == TRUE)` entries that may be duplicates. **Please confirm that these are unique updates.**
 
 
-### Table of Entries with Potential Errors (highlighted in following tables)
-```{r flagdata}
+```{r flagdata, results='asis'}
 flag_data <- admin_tab %>%  filter(any_flag == TRUE)
 
 if(nrow(flag_data) > 0){
@@ -142,7 +141,7 @@ if(nrow(flag_data) > 0){
     select(record_id, data_entry_by, entry_date, to_check, locality, intervention_specific_clean,
            date_of_update, status, subpopulation, required, size, enforcement,
            testing_population, duration, details) %>%
-    arrange(intervention_specific_clean)
+    arrange(intervention_specific_clean, date_of_update)
   
   # Removing empty columns except status and date_of_update
   keepCols <- unique(c(flag_data %>% select_if(~ !any(is.na(.))) %>% names(),
@@ -157,7 +156,14 @@ if(nrow(flag_data) > 0){
                     pageLength = 30
                   )
   )
-  df 
+  
+  cat("### Table of Entries with Potential Errors (highlighted in following tables)")
+}
+```
+
+```{r flagdatadf, results='asis'}
+if(nrow(flag_data) > 0){
+  df
 }
 ```
 

@@ -4,7 +4,7 @@ find_interven_info <- function(admin_tab, intervention){
   
   one_int <- admin_tab %>%
     filter(intervention_clean == intervention) %>%
-    arrange(intervention_specific_clean) %>%
+    arrange(intervention_specific_clean, date_of_update) %>%
     select(-country_name, -admin1_name, -national_entry, -intervention_clean, -date_flag, -status_flag)
     
     # Removing empty columns except status and date_of_update
