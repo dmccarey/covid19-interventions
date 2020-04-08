@@ -225,7 +225,6 @@ combine_interven_comp <- function(interven_df, idCols, specific_names, interven_
 }
 
 
-
 #' Function to create cleaned version of closed_border; runs combine_interven_comp()
 #' @param data wide verison of survey data
 #' @param idCols vector of column names that uniquely identify an entry
@@ -401,7 +400,6 @@ combine_interven <- function(data, idCols, interven_names_simp){
 }
 
 
-
 #' Function to create cleaned version of other intervention data; runs combine_interven_comp()
 #' @param data wide verison of survey data
 #' @param idCols vector of column names that uniquely identify an entry
@@ -545,6 +543,7 @@ create_long <- function(data,
   
   # Correcting dates (original dates in column t_original)
   dataL_clean2 <- clean_dates(dataL_clean, error_window = error_window)
+  
   
   ## Creating dataset of other interventions ##
   otherL_clean <- other_intervention_long(some_updates, idCols)
