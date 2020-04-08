@@ -7,7 +7,10 @@ reload_source()
 interven_names <- read_csv("intervention_lookup.csv")
 long_data <- get_long_data(fresh_pull = TRUE, long_file_path = "generated_data/survey_data_long.csv", remove_names=TRUE)
 last_updated_time <- file.info("generated_data/survey_data_long.csv")$mtime
-unique_locs <- long_data %>% select(country,adm1) %>% distinct
+unique_locs <- long_data %>% 
+  arrange(country, adm1) %>%
+  select(country, adm1) %>%
+  distinct
 
 date <- Sys.Date()
 out_dir <- paste0("audit_reports/",date,"/")
@@ -16,7 +19,6 @@ if(!dir.exists(out_dir)){
 }
 
 ## loop through and make reports
-## still need to deal with a few errors
 for (i in 1:nrow(unique_locs)){
   
   cat(sprintf("making report for %s (%s) \n",unique_locs[i,2],unique_locs[i,1]))
