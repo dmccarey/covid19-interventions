@@ -31,11 +31,11 @@ school_closed,School closures,unknown_school_closed,School closures of unknown t
 restaurant_closed,Restaurant closures and limitations,restaurant_closed,Restaurant closures (excluding takeout/delivery)
 restaurant_closed,Restaurant closures and limitations,restaurant_reduced,Limiting number of patrons in restaurants
 contact_tracing,Contact tracing,contact_tracing,Contact tracing
-contact_tracing,Contact tracing,contact_quarantine, Quartanine of contacts
-quar_iso,Quarantine and home isolation,quar_travel,Quartanine of travelers
-quar_iso,Quarantine and home isolation,quar_confirm, Quartanine of contacts confirmed cases
-quar_iso,Quarantine and home isolation,quar_suspect, Quartanine of contacts suspected (symptomatic) cases
-quar_iso,Quarantine and home isolation,quar_other, Quartanine of other asymptomatic individuals
+contact_tracing,Contact tracing,contact_quarantine,Quarantine of contacts
+quar_iso,Quarantine and home isolation,quar_travel,Quarantine of travelers
+quar_iso,Quarantine and home isolation,quar_confirm,Quarantine of contacts confirmed cases
+quar_iso,Quarantine and home isolation,quar_suspect,Quarantine of contacts suspected (symptomatic) cases
+quar_iso,Quarantine and home isolation,quar_other,Quarantine of other asymptomatic individuals
 quar_iso,Quarantine and home isolation,iso_suspect,Home isolation of suspected (symptomatic) cases
 quar_iso,Quarantine and home isolation,iso_confirm,Home isolation of non-hospitalized confirmed cases
 quar_iso,Quarantine and home isolation,iso_discharged,Home isolation of confirmed cases discharged from the hospital
