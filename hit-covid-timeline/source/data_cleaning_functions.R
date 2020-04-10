@@ -528,7 +528,7 @@ create_long <- function(data,
                       ifelse((!is.na(req) & req == "unknown"), "unknown",
                                     required))),
            # Removing non-unicode characters
-           details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;]", "", details),
+           details = gsub("[^[:alnum:][:blank:]?&/\\-\\.\\,\\;\\%]", "", details),
            details = iconv(details, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
            adm_lowest = iconv(adm_lowest, from = "UTF-8", to = "ASCII//TRANSLIT", sub = ""),
            # cleaning up country names a little bit 
