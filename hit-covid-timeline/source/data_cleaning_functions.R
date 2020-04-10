@@ -359,7 +359,15 @@ quar_iso_long <- function(data, idCols){
            quar_other = quar_pop___4,
            iso_suspect = iso_pop___1,
            iso_confirm = iso_pop___2,
-           iso_discharged = iso_pop___3)
+           iso_discharged = iso_pop___3) %>%
+    mutate(quar_travel_details = quar_details,
+           quar_confirm_details = quar_details,
+           quar_suspect_details = quar_details,
+           quar_other_details = quar_details,
+           iso_suspect_details = iso_details,
+           iso_confirm_details = iso_details,
+           iso_discharged_details = iso_details) %>%
+    select(-quar_details, -iso_details)
   
   # Running function to clean and combine specific interventions
   interven_dfL <- combine_interven_comp(interven_df, idCols, specific_names, interven_name)
